@@ -53,7 +53,7 @@ const Dashboard = () => {
                             ☰
                           </Button>
                         </div>
-                        {/* <Statistics /> */}
+                        <Statistics />
                         <div style={{marginTop:'2cm'}}> 
                         
                         <ProfileDetails />

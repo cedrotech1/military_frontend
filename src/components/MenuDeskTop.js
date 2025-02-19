@@ -1,9 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Nav } from 'react-bootstrap';
-import { BiUser, BiCog, BiFile } from 'react-icons/bi';
+import { BsHouseDoor, BsFileBarGraph } from "react-icons/bs";
+import { BiUser, BiCategory, BiTask, BiCalendarCheck, BiCog, BiClipboard } from "react-icons/bi";
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { BsHouseDoor } from 'react-icons/bs';
+
 import { FaBell } from 'react-icons/fa';
 import Badge from 'react-bootstrap/Badge';
 
@@ -61,21 +62,21 @@ const LandingPage = () => {
   const adminMenu = [
     { name: 'Dashboard', icon: <BsHouseDoor />, to: '/resto_statistics' },
     { name: 'Users', icon: <BiUser />, to: '/resto_dash' },
-    { name: 'Categories', icon: <BiCog />, to: '/categories' },
-    { name: 'Missions', icon: <BiFile />, to: '/missions' },
-    { name: 'Appointment', icon: <BiFile />, to: '/appointment' },
+    { name: 'Categories', icon: <BiCategory />, to: '/categories' }, 
+    { name: 'Missions', icon: <BiTask />, to: '/missions' }, 
+    { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
     { name: 'Settings', icon: <BiCog />, to: '/settings' },
-    { name: 'Report', icon: <BiFile />, to: '/reports' },
+    { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }
   ];
 
   const officerMenu = [
     { name: 'Dashboard', icon: <BsHouseDoor />, to: '/resto_statistics' },
     { name: 'Users', icon: <BiUser />, to: '/resto_dash' },
-    { name: 'Categories', icon: <BiCog />, to: '/categories' },
-    { name: 'Missions', icon: <BiFile />, to: '/missions' },
-    { name: 'Appointment', icon: <BiFile />, to: '/appointment' },
+    { name: 'Categories', icon: <BiCategory />, to: '/categories' }, 
+    { name: 'Missions', icon: <BiTask />, to: '/missions' }, 
+    { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
     { name: 'Settings', icon: <BiCog />, to: '/settings' },
-    { name: 'Report', icon: <BiFile />, to: '/reports' },
+    { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }
   ];
 
   const getMenu = () => {
@@ -90,8 +91,8 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="col-md-2 d-none d-md-block sidebar  border-end position-fixed vh-100"
-    style={{backgroundColor:'white'}}
+    <div style={{ border: '0px solid green', backgroundColor: 'white', color: 'green',margonTop:'1cm' }} className="col-md-2 d-none d-md-block sidebar  border-end position-fixed vh-100"
+   
     >
       <div className="text-center">
         <Link to="/settings">

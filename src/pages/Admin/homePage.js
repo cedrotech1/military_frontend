@@ -10,7 +10,7 @@ import { faEye, faEdit, faCheck, faTimes, faTrash } from '@fortawesome/free-soli
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../../components/loading'; // Import the LoadingSpinner component
-
+import { formatDistanceToNow } from "date-fns";
 
 
 
@@ -527,7 +527,7 @@ const Dashboard = () => {
                           </div>
 
                           <div className="text-center">
-                            <button type="submit" style={{ color: 'black' }} className={`form-control ${loading ? 'loading' : ''}`} disabled={loading}>
+                            <button type="submit" style={{ border: '1px solid green', backgroundColor: 'white', color: 'green' }} className={`form-control ${loading ? 'loading' : ''}`} disabled={loading}>
                               {loading ? <LoadingSpinner /> : 'Create Account'}
                             </button>
                           </div>
@@ -734,9 +734,13 @@ const Dashboard = () => {
                                   )}
 
                                   <h4 style={{ textAlign: 'center' }}>{Employee.firstname} &nbsp;{Employee.lastname}</h4>
-                                  <p style={{ textAlign: 'justify', fontFamily: '', textAlign: 'center' }}>
-                                    status: &nbsp; {Employee.status}
-                                  </p>
+                                  <p style={{width:'3cm',color:'white',textAlign:'center'}} className={`badge ${Employee.status === 'active' ? 'bg-success' : 'bg-warning'}`}>{Employee.status}</p><br/>
+                                                         
+                                                         <small className="text-muted" style={{backgroundColor:'white',border:'1px solid green',padding:'4px',borderRadius:'5px'}}>
+                                                                                 {formatDistanceToNow(new Date(Employee.createdAt), {
+                                                                                   addSuffix: true,
+                                                                                 })}
+                                                                               </small>
                                   <p style={{ textAlign: 'center', fontStyle: '', fontPalette: '13px', backgroundColor: 'lightgreen',color:'black', padding: '0.4cm', marginTop: '20px', borderRadius: '6px' }}>
                                     <BiMap className="" style={{ color: 'black' }} />&nbsp;&nbsp;{Employee.address} <br />
                                     <BiEnvelope className="flex-shrink-0 bi bi-envelope flex-shrink-0" style={{ color: 'black' }} />&nbsp;&nbsp;{Employee.email} <br />

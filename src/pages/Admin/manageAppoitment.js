@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Pagination } from 'react-bootstrap';
+import { Table, Button, Modal, Form, Pagination, Card } from 'react-bootstrap';
 import { toast } from "react-toastify";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,7 +32,8 @@ const AppointmentsPage = () => {
                 headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
             });
             const data = await response.json();
-            setUsers(data || []);
+            setUsers(data.users || []);
+
         } catch (error) {
             console.error('Error fetching users:', error);
             setUsers([]);
@@ -43,15 +44,23 @@ const AppointmentsPage = () => {
         try {
             const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/mission`, {
                 method: 'GET',
-                headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json'
+                }
             });
             const data = await response.json();
-            setMissions(data.data || []);
+
+            // Ensure data.data exists and filter out inactive missions
+            const activeMissions = (data.data || []).filter(mission => mission.status !== "inactive");
+
+            setMissions(activeMissions);
         } catch (error) {
             console.error('Error fetching missions:', error);
             setMissions([]);
         }
     };
+
 
     const fetchAppointments = async () => {
         try {
@@ -82,7 +91,7 @@ const AppointmentsPage = () => {
                 toast.success(newAppointment.message);
                 setTimeout(() => {
                     window.location.reload();
-                  }, 2000); // Reload after 2 seconds   
+                }, 2000); // Reload after 2 seconds   
             } else {
                 toast.error(newAppointment.message);
             }
@@ -135,7 +144,7 @@ const AppointmentsPage = () => {
                 toast.success(data.message);
                 setTimeout(() => {
                     window.location.reload();
-                  }, 2000);
+                }, 2000);
             } else {
                 toast.error(data.message);
             }
@@ -163,10 +172,10 @@ const AppointmentsPage = () => {
             });
             const data = await response.json();
             if (response.ok) {
-                  toast.success(data.message);
-                  setTimeout(() => {
+                toast.success(data.message);
+                setTimeout(() => {
                     window.location.reload();
-                  }, 2000);
+                }, 2000);
             } else {
                 const errorData = await response.json();
                 toast.error(data.message);
@@ -180,10 +189,14 @@ const AppointmentsPage = () => {
     };
 
     return (
-        <div className="container mt-4">
-            <h2>Manage Appointments</h2>
-            <Button onClick={() => setShowAssignModal(true)} className="mb-3">Assign</Button>
-            <Form.Control type="text" placeholder="Search..." onChange={handleSearch} className="mb-3" />
+        <div className="container member mt-4">
+            <h2 className="text-center mb-4" style={{ backgroundColor: 'lightgreen', padding: '0.3cm', color: 'black', borderRadius: '6px' }}>Manage Appoitments</h2>
+
+            <div className="d-flex justify-content-end" style={{ marginBottom: '0.5cm' }}>
+                <Button onClick={() => setShowAssignModal(true)} style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margonTop: '-1cm' }}>Assign mission to user</Button>
+            </div>
+
+            <Form.Control style={{ backgroundColor: 'whitesmoke', padding: '0.3cm', color: 'black', borderRadius: '6px' }} type="text" placeholder="Search..." onChange={handleSearch} className="mb-3" />
 
             <Table hover>
                 <thead>
@@ -207,7 +220,7 @@ const AppointmentsPage = () => {
                                 <td>{appointment.status}</td>
                                 {/* <td>{appointment.assigner?.firstname} {appointment.assigner?.lastname}</td> */}
                                 {/* <td>{new Date(appointment.createdAt).toLocaleDateString()}</td> */}
-                                <td><Button onClick={() => { setSelectedAppointment(appointment); setShowModal(true); }}>View</Button></td>
+                                <td><Button style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margonTop: '-1cm' }} onClick={() => { setSelectedAppointment(appointment); setShowModal(true); }}>View</Button></td>
                             </tr>
                         ))
                     ) : (
@@ -242,10 +255,10 @@ const AppointmentsPage = () => {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Select Mission</Form.Label>
-                            <Form.Control as="select" value={selectedMission} onChange={e => setSelectedMission(e.target.value)}>
-                                <option value="">Select Mission</option>
+                            <Form.Control as="select" value={selectedMission} required onChange={e => setSelectedMission(e.target.value)}>
+                                <option disabled value="">Select Mission</option>
                                 {missions.map(mission => (
-                                    <option key={mission.id} value={mission.id}>{mission.name}</option>
+                                    <option key={mission.id} value={mission.id}>{mission.name} ({mission.status})</option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
@@ -254,51 +267,86 @@ const AppointmentsPage = () => {
                 </Modal.Body>
             </Modal>
 
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Appointment Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {selectedAppointment && (<>
-                        <div>
-                            <p><strong>User:</strong> {selectedAppointment.user?.firstname} {selectedAppointment.user?.lastname}</p>
-                            <p><strong>Email:</strong> {selectedAppointment.user?.email}</p>
-                            <p><strong>Phone:</strong> {selectedAppointment.user?.phone}</p>
-                            <p><strong>Mission:</strong> {selectedAppointment.mission?.name}</p>
-                            <p><strong>Mission Description:</strong> {selectedAppointment.mission?.description}</p>
-                            <p><strong>Status:</strong> {selectedAppointment.status}</p>
-                            <p><strong>Assigned By:</strong> {selectedAppointment.assigner?.firstname} {selectedAppointment.assigner?.lastname}</p>
-                            <p><strong>Assigner Email:</strong> {selectedAppointment.assigner?.email}</p>
-                            <p><strong>Assigner Phone:</strong> {selectedAppointment.assigner?.phone}</p>
-                            <p><strong>Date Assigned:</strong> {new Date(selectedAppointment.createdAt).toLocaleDateString()}</p>
+                    {selectedAppointment && (
+                        <>
+                            {/* User Info Card */}
+                            <Card className="mb-3 shadow-sm">
+                                <Card.Body>
+                                    <Card.Title>User Information</Card.Title>
+                                    <Card.Text><strong>Name:</strong> {selectedAppointment.user?.firstname} {selectedAppointment.user?.lastname}</Card.Text>
+                                    <Card.Text><strong>Email:</strong> {selectedAppointment.user?.email}</Card.Text>
+                                    <Card.Text><strong>Phone:</strong> {selectedAppointment.user?.phone}</Card.Text>
+                                </Card.Body>
+                            </Card>
 
-                        </div>
-                        <Form>
-                            <Form.Group>
-                                <Form.Label>Update Appointment Status</Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    value={selectedStatus}
-                                    onChange={(e) => setSelectedStatus(e.target.value)}
-                                >
-                                    <option value="">Select Status</option>
-                                    <option value="inactive">Disactivate</option>
-                                    <option value="active">Active</option>
-                                    <option value="ongoing">Ongoing</option>
-                                    <option value="closed">closed(completed)</option>
-                                </Form.Control>
-                            </Form.Group>
-                            <Button onClick={() => handleUpdateStatus(selectedAppointment.id)} className="mt-3" disabled={loading}>
-                                {loading ? "Updating..." : "Update Status"}
-                            </Button>
-                            <Button onClick={() => handleDelete(selectedAppointment.id)} className="mt-3 btn btn-danger" disabled={loading}>
-                                {loading1 ? "deleting ..." : "Delete"}
-                            </Button>
+                            {/* Mission Info Card */}
+                            <Card className="mb-3 shadow-sm">
+                                <Card.Body>
+                                    <Card.Title>Mission Details</Card.Title>
+                                    <Card.Text><strong>Mission:</strong> {selectedAppointment.mission?.name}</Card.Text>
+                                    <Card.Text><strong>Description:</strong> {selectedAppointment.mission?.description}</Card.Text>
+                                    <Card.Text><strong>Start from:</strong> {new Date(selectedAppointment.mission.start_date).toLocaleDateString()} <strong>to</strong>{new Date(selectedAppointment.mission.end_date).toLocaleDateString()}</Card.Text>
 
-                        </Form>
-                    </>)}
+                                    <Card.Text><strong>Status:</strong>
+                                        <span className={`badge ${selectedAppointment.status === 'active' ? 'bg-success' :
+                                            selectedAppointment.status === 'inactive' ? 'bg-danger' :
+                                                selectedAppointment.status === 'ongoing' ? 'bg-warning' : 'bg-secondary'}`}>
+                                            {selectedAppointment.status}
+                                        </span>
+                                    </Card.Text>
+
+
+                                </Card.Body>
+                            </Card>
+
+                            {/* Assigner Info Card */}
+                            <Card className="mb-3 shadow-sm">
+                                <Card.Body>
+                                    <Card.Title>Assigned By</Card.Title>
+                                    <Card.Text><strong>Name:</strong> {selectedAppointment.assigner?.firstname} {selectedAppointment.assigner?.lastname}</Card.Text>
+                                    <Card.Text><strong>Email:</strong> {selectedAppointment.assigner?.email}</Card.Text>
+                                    <Card.Text><strong>Phone:</strong> {selectedAppointment.assigner?.phone}</Card.Text>
+                                    <Card.Text><strong>Date Assigned:</strong> {new Date(selectedAppointment.createdAt).toLocaleDateString()}</Card.Text>
+                                </Card.Body>
+                            </Card>
+
+                            {/* Status Update Form */}
+                            <Card className="mb-3 shadow-sm">
+                                <Card.Body>
+                                    <Card.Title>Update Appointment Status</Card.Title>
+                                    <Form>
+                                        <Form.Group>
+                                            <Form.Label>Status</Form.Label>
+                                            <Form.Control as="select" value={selectedStatus} style={{ backgroundColor: 'whitesmoke' }} onChange={(e) => setSelectedStatus(e.target.value)}>
+                                                <option value="">Select Status</option>
+                                                <option value="inactive">Disactivate</option>
+                                                <option value="active">Active</option>
+                                                <option value="ongoing">Ongoing</option>
+                                                <option value="closed">Closed (Completed)</option>
+                                            </Form.Control>
+                                        </Form.Group>
+
+                                        <div className="d-flex justify-content-between mt-3">
+                                            <Button style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margonTop: '-1cm' }} onClick={() => handleUpdateStatus(selectedAppointment.id)} className="btn" disabled={loading}>
+                                                {loading ? "Updating..." : "Update Status"}
+                                            </Button>
+                                            <Button style={{ border: '1px solid red', backgroundColor: 'white', color: 'red', margonTop: '-1cm' }} onClick={() => handleDelete(selectedAppointment.id)} className="btn btn-danger" disabled={loading1}>
+                                                {loading1 ? "Deleting..." : "Delete"}
+                                            </Button>
+                                        </div>
+                                    </Form>
+                                </Card.Body>
+                            </Card>
+                        </>
+                    )}
                 </Modal.Body>
             </Modal>
+
             <ToastContainer />
         </div>
     );

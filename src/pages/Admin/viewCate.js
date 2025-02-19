@@ -80,6 +80,7 @@ const CategoriesPage = () => {
   return (
     <div className="container mt-4">
       <h2 className="text-center mb-4" style={{backgroundColor:'lightgreen',border:'2px solid white',padding:'0.3cm',color:'black',borderRadius:'6px',textShadow:'1px 1px white'}}>Manage Categories</h2>
+      
       <div className="row">
         {/* Add Category Form Card */}
         <div className="col-md-6">

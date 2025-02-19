@@ -158,23 +158,25 @@ const AppointmentsPage = () => {
 
     return (
         <div className="container mt-4">
-            <h2>Appointments Report</h2>
+           
+            <h2 className="text-center mb-4" style={{backgroundColor:'lightgreen',padding:'0.3cm',color:'black',borderRadius:'6px'}}>Appointments Report</h2>
+      
 
             {/* Filter Inputs */}
             <div className="d-flex gap-2 mb-3">
-                <Form.Control type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+                <Form.Control  type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
                 <Form.Control type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
-                <Button onClick={filterByDate}>Filter</Button>
+                <Button  style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'black',margonTop:'-1cm' }} onClick={filterByDate}>Filter</Button>
             </div>
 
             {/* Search & Sorting */}
             <div className="d-flex gap-2 mb-3">
-                <Form.Control type="text" placeholder="Search by user or mission..." value={searchTerm} onChange={handleSearch} />
-                <Button onClick={() => { setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); sortAppointments(); }}>
+                <Form.Control  type="text"  style={{ border: '1px solid green', backgroundColor: 'white', color: 'black',margonTop:'-1cm' }} placeholder="Search by user or mission..." value={searchTerm} onChange={handleSearch} />
+                <Button style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'black',margonTop:'-1cm' }} onClick={() => { setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); sortAppointments(); }}>
                     Sort by Date ({sortOrder === 'asc' ? 'Oldest' : 'Newest'})
                 </Button>
                 {/* Export Button */}
-                <Button onClick={exportToCSV}>Export to CSV</Button>
+                <Button  style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'black',margonTop:'-1cm' }} onClick={exportToCSV}>Export to CSV</Button>
             </div>
 
             {/* Bar Chart */}
