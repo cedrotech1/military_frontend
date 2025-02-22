@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { formatDistanceToNow } from "date-fns";
 import { Modal, Button, Form, Card, Badge, ListGroup } from "react-bootstrap";
-
+import LoadingSpinner from '../../components/loading'; // Import the LoadingSpinner component
 
 
 const TOKEN = localStorage.getItem("token");
@@ -14,12 +14,14 @@ const MissionsPage = () => {
   const [missions, setMissions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [currentMissions, setCurrentMissions] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     location: "",
     start_date: "",
     end_date: "",
+    CountryID: ""
   });
   const handleShowModal = (mission) => {
     setSelectedMission(mission);
@@ -121,7 +123,7 @@ const MissionsPage = () => {
   const handleAddMission = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.description || !formData.location || !formData.start_date || !formData.end_date) {
+    if (!formData.name || !formData.description || !formData.location || !formData.start_date || !formData.end_date || !formData.CountryID) {
       toast.error("All fields are required.");
       return;
     }
@@ -194,6 +196,7 @@ const MissionsPage = () => {
           )
         );
         toast.success(data.message || "mission updated successfully");
+        // window.location.reload();
 
         console.log(response);
       } else {
@@ -206,10 +209,39 @@ const MissionsPage = () => {
     }
   };
 
+
+
+
+
+  // Fetch countries data
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch("http://localhost:7000/api/v1/mission/countries", {
+          headers: {
+            accept: "*/*",
+            Authorization: `Bearer ${TOKEN}`,
+          },
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setCountries(data.data);
+        } else {
+          toast.error(data.message || "Failed to fetch countries.");
+        }
+      } catch (error) {
+        toast.error("Error fetching countries: " + error.message);
+      }
+    };
+
+    fetchCountries();
+  }, []);
+
   return (
     <div className="container mt-4">
-        <h2 className="text-center mb-4" style={{backgroundColor:'lightgreen',padding:'0.3cm',color:'black',borderRadius:'6px'}}>Manage Missions</h2>
-      
+      <h2 className="text-center mb-4" style={{ backgroundColor: 'lightgreen', padding: '0.3cm', color: 'black', borderRadius: '6px' }}>Manage Missions</h2>
+
       <div className="row">
         <div className="col-md-6">
           <div className="card shadow-sm">
@@ -258,7 +290,22 @@ const MissionsPage = () => {
                   onChange={handleChange}
                   required
                 />
-                <button type="submit" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'black',margonTop:'-1cm' }} className="btn btn-primary w-100">
+                <select
+                  name="CountryID"
+                  className="form-control mb-3"
+                  value={formData.CountryID}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Country</option>
+                  {countries.map((country) => (
+                    <option key={country.id} value={country.id}>
+                      {country.common_name}
+                    </option>
+                  ))}
+                </select>
+
+                <button type="submit" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'black', margonTop: '-1cm' }} className="btn btn-primary w-100">
                   Add Mission
                 </button>
               </form>
@@ -268,130 +315,197 @@ const MissionsPage = () => {
 
         <div className="col-md-6">
           <div className="card shadow-sm">
-            <div className="card-body" style={{backgroundColor:'lightgreen'}}>
+            <div className="card-body" style={{ backgroundColor: 'lightgreen' }}>
               <h4 className="card-title">Existing Missions</h4>
               {loading ? (
-                <p>Loading missions...</p>
-              ) :
-                currentMissions.length > 0 ? (
-                  currentMissions.map((mission) => (
-                    <div className="card mb-3" key={mission.id}>
-                      <div className="card-body">
-                        <h5 className="card-title">Name:{mission.name}</h5>
-                        <p><strong>Description:</strong> {mission.description}</p>
-                        <p><strong>Location:</strong> {mission.location}</p>
-                       <p>Start from: {new Date(mission.start_date).toLocaleDateString()} to {new Date(mission.end_date).toLocaleDateString()}</p>
-                                              {/* <p>End date: {new Date(mission.end_date).toLocaleDateString()}</p> */}
-                                             
-                                            
-                         <p><strong>Status:</strong> <p style={{width:'3cm',color:'white',textAlign:'center'}} className={`badge ${mission.status === 'active' ? 'bg-success' : 'bg-warning'}`}>{mission.status}</p><br/>
-                         </p>
-                         <small className="text-muted" style={{backgroundColor:'white',border:'1px solid green',padding:'4px',borderRadius:'5px'}}>
-                         Created {formatDistanceToNow(new Date(mission.createdAt), {
-                                                                        addSuffix: true,
-                                                                      })}
-                                                                    </small><br/><br/>
+                <p><LoadingSpinner/></p>
+              ) : currentMissions.length > 0 ? (
+                currentMissions.map((mission) => (
+                  <div className="card mb-4" key={mission.id} style={{ borderRadius: '10px' }}>
+                    <div className="card-body">
+                      <h5 className="card-title">{mission.name}</h5>
+                      <p><strong>Description:</strong> {mission.description}</p>
+                      <p><strong>Location:</strong> {mission.location}</p>
+                      <p>Start: {new Date(mission.start_date).toLocaleDateString()} to {new Date(mission.end_date).toLocaleDateString()}</p>
 
+                      {/* <div className="d-flex align-items-center mb-2">
+                <span className="badge" style={{ backgroundColor: mission.status === 'active' ? 'green' : 'orange', color: 'white', padding: '5px 10px', borderRadius: '15px' }}>
+                  {mission.status}
+                </span>
+              </div> */}
+
+                      <small className="text-muted" style={{ backgroundColor: 'white', border: '1px solid green', padding: '5px', borderRadius: '5px' }}>
+                        Created {formatDistanceToNow(new Date(mission.createdAt), { addSuffix: true })}
+                      </small>
+
+                      <div className="country-details mt-3 p-3 rounded" style={{ backgroundColor: 'whitesmoke' }}>
+                        <div className="row align-items-center">
+                          {/* Flag Image */}
+                          <div className="col-12 col-md-4 mb-3 mb-md-0">
+                            <img
+                              src={mission.country.flag_url}
+                              alt={`${mission.country.common_name} Flag`}
+                              className="img-fluid"
+                            // style={{ maxHeight: '3cm', maxWidth: '5cm' }}
+                            />
+                          </div>
+
+                          {/* Country Details */}
+                          <div className="col-12 col-md-8">
+                            <h6><strong>Country:</strong> {mission.country.common_name}</h6>
+                            <p><strong>Official Name:</strong> {mission.country.official_name}</p>
+                            <p><strong>Capital:</strong> {mission.country.capital}</p>
+                            <p>
+                              <a href={mission.country.google_map_url} target="_blank" rel="noopener noreferrer">
+                                View on Google Maps
+                              </a>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+                      <div className="d-flex justify-content-between mt-3">
                         <button
                           className={`btn ${mission.active ? "btn-warning" : "btn-success"} me-2`}
                           onClick={() => handleToggleStatus(mission.id, mission.active)}
-                          style={{ border: '1px solid green', backgroundColor: 'white', color: 'green',margonTop:'-1cm' }}
+                          style={{ backgroundColor: 'white', color: 'green', border: '1px solid green' }}
                         >
                           {mission.active ? "Deactivate" : "Activate"}
                         </button>
 
-                        <button style={{ border: '1px solid skyblue', backgroundColor: 'white', color: 'skyblue',margonTop:'-1cm' }} className="btn btn-info me-2" onClick={() => handleShowDetails(mission)}>View Details</button>
-                        <button style={{ border: '1px solid red', backgroundColor: 'white', color: 'red',margonTop:'-1cm' }} className="btn btn-danger" onClick={() => handleDeleteMission(mission.id)}>
+                        <button
+                          style={{ backgroundColor: 'white', color: 'skyblue', border: '1px solid skyblue' }}
+                          className="btn btn-info me-2"
+                          onClick={() => handleShowDetails(mission)}
+                        >
+                          View Details
+                        </button>
+
+                        <button
+                          style={{ backgroundColor: 'white', color: 'red', border: '1px solid red' }}
+                          className="btn btn-danger"
+                          onClick={() => handleDeleteMission(mission.id)}
+                        >
                           Delete
                         </button>
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <p className="text-muted">No missions found.</p>
-                )}
-              <button className="btn btn-secondary mt-3" onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
-              <button className="btn btn-secondary mt-3 ms-2" onClick={handleNextPage} disabled={currentPage === totalPages}>Next</button>
+                  </div>
+                ))
+              ) : (
+                <p className="text-muted">No missions found.</p>
+              )}
+
+              <div className="d-flex justify-content-between mt-3">
+                <button className="btn btn-secondary" onClick={handlePrevPage} disabled={currentPage === 1}>
+                  Previous
+                </button>
+                <button className="btn btn-secondary" onClick={handleNextPage} disabled={currentPage === totalPages}>
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </div>
+
 
       </div>
 
       {selectedMission && (
         <Modal show={showModal} onHide={handleCloseModal} centered size="lg">
-        <Modal.Header closeButton className="bg-success text-white">
-          <Modal.Title>Mission Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="row">
-            {/* Left Column: Mission Details */}
-            <div className="col-md-6">
-              <Card className="shadow-sm border-0">
-                <Card.Body>
-                  <h5 className="text-primary">Mission Info</h5>
-                  <p><strong>Name:</strong> {selectedMission.name}</p>
-                  <p><strong>Description:</strong> {selectedMission.description}</p>
-                  <p><strong>Location:</strong> {selectedMission.location}</p>
-                  <p><strong>Status:</strong> <Badge bg={selectedMission.status === "active" ? "success" : "warning"}>{selectedMission.status}</Badge></p>
-                </Card.Body>
-              </Card>
-  
-              <Card className="shadow-sm border-0 mt-3">
-                <Card.Body>
-                  <h5 className="text-primary">Created By</h5>
-                  <p><strong>Name:</strong> {selectedMission.creator.firstname} {selectedMission.creator.lastname}</p>
-                  <p><strong>Email:</strong> {selectedMission.creator.email}</p>
-                  <p><strong>Phone:</strong> {selectedMission.creator.phone}</p>
-                </Card.Body>
-              </Card>
+          <Modal.Header closeButton className="bg-success text-white">
+            <Modal.Title>Mission Details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row">
+              {/* Left Column: Mission Details */}
+              <div className="col-md-6">
+                <Card className="shadow-sm border-0">
+                  <Card.Body>
+                    <h5 className="text-primary">Mission Info</h5>
+                    <p><strong>Name:</strong> {selectedMission.name}</p>
+                    <p><strong>Description:</strong> {selectedMission.description}</p>
+                    <p><strong>Location:</strong> {selectedMission.location}</p>
+                    <p><strong>Status:</strong> <Badge bg={selectedMission.status === "active" ? "success" : "warning"}>{selectedMission.status}</Badge></p>
+                  </Card.Body>
+                </Card>
+
+                <Card className="shadow-sm border-0 mt-3">
+                  <Card.Body>
+                    <h5 className="text-primary">Created By</h5>
+                    <p><strong>Name:</strong> {selectedMission.creator.firstname} {selectedMission.creator.lastname}</p>
+                    <p><strong>Email:</strong> {selectedMission.creator.email}</p>
+                    <p><strong>Phone:</strong> {selectedMission.creator.phone}</p>
+                  </Card.Body>
+                </Card>
+              </div>
+
+              {/* Right Column: Dates & Appointments */}
+              <div className="col-md-6">
+                <Card className="shadow-sm border-0">
+                  <Card.Body>
+                    <h5 className="text-primary">Mission Duration</h5>
+                    <Form>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Start Date</Form.Label>
+                        <Form.Control type="date" value={selectedMission.start_date.split("T")[0]} readOnly />
+                      </Form.Group>
+                      <Form.Group className="mb-3">
+                        <Form.Label>End Date</Form.Label>
+                        <Form.Control type="date" value={selectedMission.end_date.split("T")[0]} readOnly />
+                      </Form.Group>
+                    </Form>
+                  </Card.Body>
+                </Card>
+
+
+
+                {/* Country Card */}
+                <Card className="shadow-sm border-0 mt-3">
+                  <Card.Body>
+                    <h5 className="text-primary">Country Info</h5>
+                    <p><strong>Country:</strong> {selectedMission.country.common_name}</p>
+                    <p><strong>Official Name:</strong> {selectedMission.country.official_name}</p>
+                    <p><strong>Capital:</strong> {selectedMission.country.capital}</p>
+                    <img src={selectedMission.country.flag_url} alt={`${selectedMission.country.common_name} Flag`} width="100" className="mb-2" />
+                    <p>
+                      <a href={selectedMission.country.google_map_url} target="_blank" rel="noopener noreferrer">
+                        View on Google Maps
+                      </a>
+                    </p>
+                  </Card.Body>
+                </Card>
+
+                <Card className="shadow-sm border-0 mt-3">
+                  <Card.Body>
+                    <h5 className="text-primary">Appointments</h5>
+                    <ListGroup variant="flush">
+                      {selectedMission.appointments.length > 0 ? (
+                        selectedMission.appointments.map((appointment) => (
+                          <ListGroup.Item key={appointment.id} className="d-flex justify-content-between align-items-center">
+                            <div>
+                              <strong>{appointment.user?.firstname} {appointment.user?.lastname}</strong>
+                            </div>
+                            <Badge bg={appointment.status === "active" ? "success" : "warning"}>{appointment.status}</Badge>
+                          </ListGroup.Item>
+                        ))
+                      ) : (
+                        <ListGroup.Item className="text-muted">No Appointments</ListGroup.Item>
+                      )}
+                    </ListGroup>
+                  </Card.Body>
+                </Card>
+              </div>
             </div>
-  
-            {/* Right Column: Dates & Appointments */}
-            <div className="col-md-6">
-              <Card className="shadow-sm border-0">
-                <Card.Body>
-                  <h5 className="text-primary">Mission Duration</h5>
-                  <Form>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Start Date</Form.Label>
-                      <Form.Control type="date" value={selectedMission.start_date.split("T")[0]} readOnly />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                      <Form.Label>End Date</Form.Label>
-                      <Form.Control type="date" value={selectedMission.end_date.split("T")[0]} readOnly />
-                    </Form.Group>
-                  </Form>
-                </Card.Body>
-              </Card>
-  
-              <Card className="shadow-sm border-0 mt-3">
-                <Card.Body>
-                  <h5 className="text-primary">Appointments</h5>
-                  <ListGroup variant="flush">
-                    {selectedMission.appointments.length > 0 ? (
-                      selectedMission.appointments.map((appointment) => (
-                        <ListGroup.Item key={appointment.id} className="d-flex justify-content-between align-items-center">
-                          <div>
-                            <strong>{appointment.user?.firstname} {appointment.user?.lastname}</strong>
-                          </div>
-                          <Badge bg={appointment.status === "active" ? "success" : "warning"}>{appointment.status}</Badge>
-                        </ListGroup.Item>
-                      ))
-                    ) : (
-                      <ListGroup.Item className="text-muted">No Appointments</ListGroup.Item>
-                    )}
-                  </ListGroup>
-                </Card.Body>
-              </Card>
-            </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
-        </Modal.Footer>
-      </Modal>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       )}
+
 
 
       <ToastContainer />

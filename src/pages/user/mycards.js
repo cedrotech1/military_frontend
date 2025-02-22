@@ -21,7 +21,7 @@ const LandingPage = () => {
     const fetchAppointments = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_BASE_URL}/api/v1/appoitment/`,
+          `${process.env.REACT_APP_BASE_URL}/api/v1/appoitment/user`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

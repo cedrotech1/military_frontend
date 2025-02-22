@@ -33,6 +33,7 @@ import Setting from "./pages/Admin/user-profile";
 import OurResto from "./pages/Admin/restaurentPage";
 import OurCate from "./pages/Admin/categoryPage";
 import OurReport from "./pages/Admin/report";
+import Department from "./pages/Admin/DepartmentPage";
 
 
 
@@ -48,6 +49,8 @@ import Report from "./pages/Admin/report";
 import Forgot from "./pages/landing/reset";
 import Code from "./pages/landing/code";
 import ResetPassword from "./pages/landing/resetPassword";
+import Members from "./pages/Admin/DepartmentMembersPage";
+import Country from "./pages/Admin/CountryPage";
 
 
 
@@ -105,6 +108,9 @@ function App() {
         <Route path="/mynotification" element={<Mynotification/>} exact={true} />
         <Route path="/other_user-profile/:id" element={<OtherProfile/>} exact={true} />
         <Route path="/reports" element={<Report/>} exact={true} />
+        <Route path="/department" element={<Department/>} exact={true} />
+        <Route path="/members/:id" element={<Members/>} exact={true} />
+        <Route path="/country" element={<Country/>} exact={true} />
 
         
   

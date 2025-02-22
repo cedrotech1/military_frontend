@@ -85,7 +85,7 @@ function App() {
               </form>
             </div>
             <div className="col-lg-5 order-1 order-lg-2 d-flex align-items-center justify-content-center loginImg">
-              <img src="assets/img/Secure login-bro.svg" className="img-fluid loginImg" alt="" data-aos="zoom-out" data-aos-delay="100" />
+            <img src="assets/img/kagame.jpg" style={{borderRadius:'0.5cm',margin:'0.5cm'}} className="img-fluid loginImg" alt="" data-aos="zoom-out" data-aos-delay="100" />
             </div>
 
           </div>

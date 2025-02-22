@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const API_BASE_URL = "http://localhost:5000/api/v1/categories";
-const TOKEN =localStorage.getItem('token');
+const TOKEN = localStorage.getItem("token");
+
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true); // Track loading state
 
   useEffect(() => {
     fetchCategories();
@@ -30,6 +31,8 @@ const CategoriesPage = () => {
       setCategories(data.data);
     } catch (error) {
       setError(error.message);
+    } finally {
+      setLoading(false); // Stop loading when fetch is done
     }
   };
 
@@ -79,8 +82,10 @@ const CategoriesPage = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="text-center mb-4" style={{backgroundColor:'lightgreen',border:'2px solid white',padding:'0.3cm',color:'black',borderRadius:'6px',textShadow:'1px 1px white'}}>Manage Categories</h2>
-      
+      <h2 className="text-center mb-4" style={{ backgroundColor: "lightgreen", border: "2px solid white", padding: "0.3cm", color: "black", borderRadius: "6px", textShadow: "1px 1px white" }}>
+        Manage Categories
+      </h2>
+
       <div className="row">
         {/* Add Category Form Card */}
         <div className="col-md-6">
@@ -88,15 +93,9 @@ const CategoriesPage = () => {
             <div className="card-body">
               <h4 className="card-title">Add Category</h4>
               <div className="mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter category name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <input type="text" className="form-control" placeholder="Enter category name" value={name} onChange={(e) => setName(e.target.value)} />
               </div>
-              <button className="btn btn-primary w-100" style={{border: '1px solid lightgreen', backgroundColor: 'lightgreen', color: 'black',margonTop:'1cm',width:'80%' }}onClick={handleAddCategory}>
+              <button className="btn btn-primary w-100" style={{ border: "1px solid lightgreen", backgroundColor: "lightgreen", color: "black", marginTop: "1cm", width: "80%" }} onClick={handleAddCategory}>
                 Add Category
               </button>
               {message && <p className="text-success mt-2">{message}</p>}
@@ -110,7 +109,12 @@ const CategoriesPage = () => {
           <div className="card shadow-sm">
             <div className="card-body">
               <h4 className="card-title">Existing Categories</h4>
-              {categories.length > 0 ? (
+
+              {loading ? (
+                <p className="text-primary">Loading categories...</p>
+              ) : error ? (
+                <p className="text-danger">{error}</p>
+              ) : categories.length > 0 ? (
                 <table className="table table-striped">
                   <thead>
                     <tr>
@@ -127,11 +131,7 @@ const CategoriesPage = () => {
                         <td>{category.name}</td>
                         <td>{new Date(category.createdAt).toLocaleString()}</td>
                         <td>
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => handleDeleteCategory(category.id)}
-                            
-                          >
+                          <button className="btn btn-danger btn-sm" onClick={() => handleDeleteCategory(category.id)}>
                             Delete
                           </button>
                         </td>

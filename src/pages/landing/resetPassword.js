@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate,useParams,Link} from 'react-router-dom';
 import LoadingSpinner from '../../components/loading'; 
-
+import rdfImage from './rdf.jpg';
 import 'react-toastify/dist/ReactToastify.css'
 function App() {
   const navigate = useNavigate();
@@ -96,8 +96,8 @@ function App() {
               </form>
             </div>
             <div className="col-lg-5 order-1 order-lg-2 d-flex align-items-center justify-content-center loginImg">
-              <img src="assets/img/Secure login-bro.svg" className="img-fluid loginImg" alt="" data-aos="zoom-out" data-aos-delay="100" />
-            </div>
+                <img src={rdfImage}  style={{borderRadius:'0.5cm',margin:'0.5cm'}} className="img-fluid loginImg" alt="" data-aos="zoom-out" data-aos-delay="100" />
+              </div>
 
           </div>
         </div>

@@ -63,6 +63,8 @@ const LandingPage = () => {
     { name: 'Dashboard', icon: <BsHouseDoor />, to: '/resto_statistics' },
     { name: 'Users', icon: <BiUser />, to: '/resto_dash' },
     { name: 'Categories', icon: <BiCategory />, to: '/categories' }, 
+    { name: 'Country', icon: <BiCategory />, to: '/country' }, 
+    { name: 'department', icon: <BiTask />, to: '/department' }, 
     { name: 'Missions', icon: <BiTask />, to: '/missions' }, 
     { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
     { name: 'Settings', icon: <BiCog />, to: '/settings' },

@@ -23,6 +23,7 @@ const LandingPage = () => {
         newPassword: '',
         confirmPassword: '',
     });
+    const [user, setUser] = useState(null);
 
     const [formDataImage, setFormDataImage] = useState({
         image: null,
@@ -172,6 +173,7 @@ const LandingPage = () => {
     };
     // console.log(formData.image)
 
+
     return (
         <>
             {/* {loading ? <LoadingSpinner /> : <> */}
@@ -231,6 +233,7 @@ const LandingPage = () => {
                                         <p>{formData.phone}</p>
                                     </div>
                                 </div>
+                                
                                 <Button
                                     variant=""
                                     onClick={handleTogglePasswordModal}

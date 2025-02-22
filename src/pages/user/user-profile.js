@@ -2,6 +2,7 @@ import React from 'react';
 import '../../css/main2.css';
 import Footer from "../../components/footer";
 import Profile from "../../pages/user/profile";
+import Dep from "../../pages/user/department";
 
 
 
@@ -17,8 +18,9 @@ const LandingPage = () => {
         
 
         </div>
-        <div className='col-xl-8 col-md-2'>
+        <div className='col-xl-8'>
           <Profile/>
+          <Dep/>
         
 
         </div>

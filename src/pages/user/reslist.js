@@ -5,14 +5,17 @@ import Footer from '../../components/footer';
 import { BiEnvelope, BiPhone, BiMap } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { formatDistanceToNow } from "date-fns";
+import { Modal, Card, Button, Badge, ListGroup, Form } from 'react-bootstrap'; // Import components for Modal
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [filter, setFilter] = useState(""); // Filter state
-  const itemsPerPage = 3; // Only 3 items per page
+  const [filter, setFilter] = useState("");
+  const [showModal, setShowModal] = useState(false);  // State to manage modal visibility
+  const [selectedMission, setSelectedMission] = useState(null);  // State for selected mission details
+  const itemsPerPage = 3;
 
   useEffect(() => {
     const fetchMissions = async () => {
@@ -38,18 +41,22 @@ const LandingPage = () => {
     fetchMissions();
   }, []);
 
-  const handleView = (id) => {
-    // navigate(`../one/${id}`);
+  const handleView = (mission) => {
+    setSelectedMission(mission);  // Set selected mission details
+    setShowModal(true);  // Open the modal
   };
 
-  // Filtered Missions
+  const handleCloseModal = () => {
+    setShowModal(false);  // Close the modal
+    setSelectedMission(null);  // Clear the selected mission
+  };
+
   const filteredMissions = missions.filter(mission =>
     mission.name.toLowerCase().includes(filter.toLowerCase()) ||
     mission.description.toLowerCase().includes(filter.toLowerCase()) ||
     mission.status.toLowerCase().includes(filter.toLowerCase())
   );
 
-  // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentMissions = filteredMissions.slice(indexOfFirstItem, indexOfLastItem);
@@ -64,8 +71,7 @@ const LandingPage = () => {
             <b>LIST OF ALL <span className='apart' style={{ color: 'lightgreen' }}>MISSIONS</span> </b>
           </h5>
           <p style={{ fontFamily: 'monospace' }}>
-            list of all mission Millitary created, in different times  <br/>
-            with user who ctrated contact
+            List of all military missions, in different times, with user who created contact
           </p>
 
           {/* Filter Input */}
@@ -77,13 +83,11 @@ const LandingPage = () => {
             style={{
               width: '50%',
               padding: '10px',
-              // marginTop: '10px',
-              // backgroundColor:'whitesmoke',
               borderRadius: '5px',
-           
-              border: '1px solid lightgreen', backgroundColor: 'lightgreen', color: 'green',margonTop:'-1cm' 
+              border: '1px solid lightgreen',
+              backgroundColor: 'lightgreen',
+              color: 'green',
             }}
-          
           />
         </div>
       </section>
@@ -103,22 +107,18 @@ const LandingPage = () => {
                       key={mission.id}
                       className="col-xl-4 col-md-6"
                       style={{ cursor: 'pointer' }}
-                      onClick={() => handleView(mission.id)}
+                      onClick={() => handleView(mission)} // Pass the whole mission object
                     >
-                      <div className="team member col-xl-12" style={{ padding: "0.3cm",border:'1px solid green' }}>
+                      <div className="team member col-xl-12" style={{ padding: "0.3cm", border: '1px solid green' }}>
                         <h4>{mission.name}</h4>
                         <p>{mission.description}</p>
                         <p>Start from: {new Date(mission.start_date).toLocaleDateString()} to {new Date(mission.end_date).toLocaleDateString()}</p>
-                        {/* <p>End date: {new Date(mission.end_date).toLocaleDateString()}</p> */}
-                          <p style={{width:'3cm',color:'white',textAlign:'center'}} className={`badge ${mission.status === 'active' ? 'bg-success' : 'bg-warning'}`}>{mission.status}</p><br/>
-                        
-                        <small className="text-muted" style={{backgroundColor:'white',border:'1px solid green',padding:'4px',borderRadius:'5px'}}>
-                                                {formatDistanceToNow(new Date(mission.createdAt), {
-                                                  addSuffix: true,
-                                                })}
-                                              </small>
+                        <p style={{ width: '3cm', color: 'white', textAlign: 'center' }} className={`badge ${mission.status === 'active' ? 'bg-success' : 'bg-warning'}`}>{mission.status}</p><br />
+                        <small className="text-muted" style={{ backgroundColor: 'white', border: '1px solid green', padding: '4px', borderRadius: '5px' }}>
+                          {formatDistanceToNow(new Date(mission.createdAt), { addSuffix: true })}
+                        </small>
 
-                        <p style={{ fontStyle: 'italic',color:'black', border:'1px solid lightgreen', backgroundColor: 'lightgreen', padding: '0.3cm', borderRadius: '6px',marginTop:'20px' }}>
+                        <p style={{ fontStyle: 'italic', color: 'black', border: '1px solid lightgreen', backgroundColor: 'lightgreen', padding: '0.3cm', borderRadius: '6px', marginTop: '20px' }}>
                           <u>Mission Creator</u> <br />
                           <BiMap /> {mission.location} <br />
                           <BiEnvelope /> {mission.creator.email} <br />
@@ -179,6 +179,96 @@ const LandingPage = () => {
           </div>
 
         </>
+      )}
+
+      {/* Mission Details Modal */}
+      {selectedMission && (
+        <Modal show={showModal} onHide={handleCloseModal} centered size="lg">
+          <Modal.Header closeButton className="bg-success text-white">
+            <Modal.Title>Mission Details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row">
+              <div className="col-md-6">
+                <Card className="shadow-sm border-0">
+                  <Card.Body>
+                    <h5 className="text-primary">Mission Info</h5>
+                    <p><strong>Name:</strong> {selectedMission.name}</p>
+                    <p><strong>Description:</strong> {selectedMission.description}</p>
+                    <p><strong>Location:</strong> {selectedMission.location}</p>
+                    <p><strong>Status:</strong> <Badge bg={selectedMission.status === "active" ? "success" : "warning"}>{selectedMission.status}</Badge></p>
+                  </Card.Body>
+                </Card>
+
+                <Card className="shadow-sm border-0 mt-3">
+                  <Card.Body>
+                    <h5 className="text-primary">Created By</h5>
+                    <p><strong>Name:</strong> {selectedMission.creator.firstname} {selectedMission.creator.lastname}</p>
+                    <p><strong>Email:</strong> {selectedMission.creator.email}</p>
+                    <p><strong>Phone:</strong> {selectedMission.creator.phone}</p>
+                  </Card.Body>
+                </Card>
+              </div>
+
+              <div className="col-md-6">
+                <Card className="shadow-sm border-0">
+                  <Card.Body>
+                    <h5 className="text-primary">Mission Duration</h5>
+                    <Form>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Start Date</Form.Label>
+                        <Form.Control type="date" value={selectedMission.start_date.split("T")[0]} readOnly />
+                      </Form.Group>
+                      <Form.Group className="mb-3">
+                        <Form.Label>End Date</Form.Label>
+                        <Form.Control type="date" value={selectedMission.end_date.split("T")[0]} readOnly />
+                      </Form.Group>
+                    </Form>
+                  </Card.Body>
+                </Card>
+
+                  <Card className="shadow-sm border-0 mt-3">
+                                  <Card.Body>
+                                    <h5 className="text-primary">Country Info</h5>
+                                    <p><strong>Country:</strong> {selectedMission.country.common_name}</p>
+                                    <p><strong>Official Name:</strong> {selectedMission.country.official_name}</p>
+                                    <p><strong>Capital:</strong> {selectedMission.country.capital}</p>
+                                    <img src={selectedMission.country.flag_url} alt={`${selectedMission.country.common_name} Flag`} width="100" className="mb-2" />
+                                    <p>
+                                      <a href={selectedMission.country.google_map_url} target="_blank" rel="noopener noreferrer">
+                                        View on Google Maps
+                                      </a>
+                                    </p>
+                                  </Card.Body>
+                                </Card>
+
+                <Card className="shadow-sm border-0 mt-3">
+                  <Card.Body>
+                    <h5 className="text-primary">Appointments</h5>
+                    <ListGroup variant="flush">
+                      {selectedMission.appointments.length > 0 ? (
+                        selectedMission.appointments.map((appointment) => (
+                          <ListGroup.Item key={appointment.id} className="d-flex justify-content-between align-items-center">
+                            <div>
+                              <strong>{appointment.user?.firstname} {appointment.user?.lastname}</strong>
+                            </div>
+                          </ListGroup.Item>
+                        ))
+                      ) : (
+                        <p>No appointments scheduled</p>
+                      )}
+                    </ListGroup>
+                  </Card.Body>
+                </Card>
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       )}
 
       <Footer />

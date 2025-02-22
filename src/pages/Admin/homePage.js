@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from '../../components/loading'; // Import the LoadingSpinner component
 import { formatDistanceToNow } from "date-fns";
-
+import axios from "axios";
 
 
 import Menu from "../../components/MenuDeskTop";
@@ -37,7 +37,24 @@ const Dashboard = () => {
   const [ID, setID] = useState();
   const [rest, SetResto] = useState('');
   const navigate = useNavigate();
+  const [departments, setDepartments] = useState([]);
 
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/department/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setDepartments(response.data.data);
+    } catch (error) {
+      toast.error("Error fetching departments");
+      console.error(error);
+    }
+  };
+  console.log(departments)
 
 
   useEffect(() => {
@@ -177,7 +194,7 @@ const Dashboard = () => {
     const buttonStyle = {
       backgroundColor: 'white',
       border: '0px',
-      color:'gray'
+      color: 'gray'
     };
 
     if (userStatus === 'active') {
@@ -238,13 +255,21 @@ const Dashboard = () => {
     role: 'user',
     address: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    departmentId: ''
+
   });
 
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.departmentId) {
+      setError("Department is required.");
+      toast.error("Please select a department.");
+      return;
+    }
 
     try {
       setLoading(true);
@@ -362,6 +387,18 @@ const Dashboard = () => {
 
   const handleViewProfile = (id) => { navigate(`../other_user-profile/${id}`); }
 
+  const handleDepartmentChange = (e) => {
+    const newDepartmentId = e.target.value;
+
+    console.log("Department ID changed to:", newDepartmentId); // Log the departmentId change
+
+    setFormData({
+      ...formData,
+      departmentId: newDepartmentId,
+    });
+  };
+
+
   return (
     <body className='mybody'>
       <div className="dashboard" style={{ backgroundColor: 'whitesmoke' }}>
@@ -449,6 +486,8 @@ const Dashboard = () => {
                         <h4 style={{ textAlign: 'justify', paddingBottom: '0cm', color: 'gray', paddingLeft: '0.4cm' }}>LIST OF USERS </h4>
 
                       </div>
+                  
+
                       <div className="col-xl-4 col-md-4" style={{ padding: '0.4cm' }}>
                         <div style={{ textAlign: 'right', marginBottom: '0.4cm' }}>
                           <Button
@@ -461,10 +500,14 @@ const Dashboard = () => {
                               textDecoration: 'none',
                               padding: '0.2cm',
                               width: '4cm',
+
                               // marginTop: '-2cm',
                               marginRight: '0.3cm',
                               color: 'black',
                               height: 'auto',
+                              border: '2px solid lightgreen',
+
+
                             }}
                           >
                             Add Users
@@ -526,6 +569,26 @@ const Dashboard = () => {
                             </select>
                           </div>
 
+                          <div className="form-group mt-3">
+                            <span>Department</span>
+                            <select
+                              name="departmentId"
+                              onChange={handleDepartmentChange}
+                              className="form-control"
+                              required
+                              id=""
+                            >
+                              <option value="">Select department</option>
+                              {departments.map((department) => (
+                                <option key={department.id} value={department.id}>
+                                  {department.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+
+
                           <div className="text-center">
                             <button type="submit" style={{ border: '1px solid green', backgroundColor: 'white', color: 'green' }} className={`form-control ${loading ? 'loading' : ''}`} disabled={loading}>
                               {loading ? <LoadingSpinner /> : 'Create Account'}
@@ -539,7 +602,6 @@ const Dashboard = () => {
                     <Modal
                       className="modal fade bd-example-modal-lg"
                       size="lg"
-                      tabindex="-1"
                       role="dialog"
                       aria-labelledby="myLargeModalLabel"
                       aria-hidden="true"
@@ -551,53 +613,68 @@ const Dashboard = () => {
                       </Modal.Header>
                       <Modal.Body>
                         {selectedUser && (
-                          <>
-                            <section id="team" className="team">
-                              <div className="container" data-aos="fade-up">
-                                <div className="row">
-                                  <div className="" data-aos="fade-up" data-aos-delay="100">
-                                    <div className="row">
-                                      <div className=" col-xl-6 col-md-6 d-flex">
-                                        {/* <img src="assets/img/Writer's block-rafiki.svg" className="img-fluid" alt="" style={{ height: 'auto' }} /> */}
-                                        {selectedUser.image !== null ? (
-                                          <img src={selectedUser.image} className="img-fluid" alt="" style={{ borderRadius: '10px', marginBottom: '0.5cm', width: '9cm' }} />
-
-                                        ) : (
-                                          <img src="/assets/img/images (3).png" className="img-fluid" alt="Default Image" style={{ borderRadius: '10px', marginBottom: '0.5cm', width: '9cm' }} />
-
-                                        )}
-                                      </div>
-                                      <div className=" col-xl-6 col-md-6" style={{ padding: '0.5cm', backgroundColor: 'white', borderRadius: '0.5cm' }}>
-                                        <h5 style={{ textAlign: 'justify' }}>USER IDENTIFICATION
-
-                                        </h5>
-                                        <p style={{ textAlign: 'justify', marginTop: '1cm' }}>
-                                          <p>Name: {selectedUser.firstname} {selectedUser.lastname}</p>
-                                          <p>Email: {selectedUser.email}</p>
-                                          <p>Phone: {selectedUser.phone}</p>
-                                          <p>role: {selectedUser.role == 'user' ? 'personel(user)' : selectedUser.role}</p>
-                                          <p>Status: {selectedUser.status}</p>
-                                          <p>gender: {selectedUser.gender}</p>
-                                          <p>location: {selectedUser.address}</p>
-                                        </p>
-                                        <div className="d-flex justify-content-center justify-content-lg-start">
-                                          <Button style={{ border: '1px solid green', backgroundColor: 'white', color: 'green',margonTop:'-1cm' }} onClick={() => handleViewProfile(selectedUser.id)} className="mt-3" disabled={loading}>
-                                            {selectedUser.gender=='Male' ? "View His profile" : "View Her profile"}
-                                          </Button>
-
-                                        </div>
-                                      </div>
-                                    </div>
-
-
-                                  </div>
-
+                          <section id="team" className="team">
+                            <div className="container" data-aos="fade-up">
+                              <div className="row">
+                                <div className="col-xl-6 col-md-6 d-flex justify-content-center">
+                                  <img
+                                    src={selectedUser.image ? selectedUser.image : "/assets/img/images (3).png"}
+                                    className="img-fluid"
+                                    alt="User Profile"
+                                    style={{
+                                      borderRadius: "10px",
+                                      marginBottom: "0.5cm",
+                                      // objectFit: selectedUser.image ? "cover" : "",
+                                      height: selectedUser.image ? "auto" : "10cm",
+                                      width: "100%",
+                                      // height: "auto",
+                                      opacity: selectedUser.image ? "1" : "0.8",
+                                    }}
+                                  />
 
 
                                 </div>
+                                <div
+                                  className="col-xl-6 col-md-6 p-3"
+                                  style={{ backgroundColor: "#f9f9f9", borderRadius: "0.5cm" }}
+                                >
+                                  <h5 className="">USER IDENTIFICATION</h5>
+                                  <p><strong>Name:</strong> {selectedUser.firstname} {selectedUser.lastname}</p>
+                                  <p><strong>Email:</strong> {selectedUser.email}</p>
+                                  <p><strong>Phone:</strong> {selectedUser.phone}</p>
+                                  <p><strong>Role:</strong> {selectedUser.role === "user" ? "Personnel (User)" : selectedUser.role}</p>
+                                  <p><strong>Status:</strong> <span className={selectedUser.status === "active" ? "text-success" : "text-danger"}>{selectedUser.status}</span></p>
+                                  <p><strong>Gender:</strong> {selectedUser.gender}</p>
+                                  <p><strong>Location:</strong> {selectedUser.address || "N/A"}</p>
+
+                                  {selectedUser.department && (
+                                    <>
+                                      <h3 className="mt-4">Department Info</h3>
+                                      <div className="card p-3">
+                                        <p><strong>Department Name:</strong> {selectedUser.department.name}</p>
+                                        <p><strong>Description:</strong> {selectedUser.department.description}</p>
+                                        <h5>Department Head</h5>
+                                        <p><strong>Name:</strong> {selectedUser.department.reader?.firstname} {selectedUser.department.reader?.lastname}</p>
+                                        <p><strong>Email:</strong> {selectedUser.department.reader?.email}</p>
+                                        <p><strong>Phone:</strong> {selectedUser.department.reader?.phone}</p>
+                                        <p><strong>Role:</strong> {selectedUser.department.reader?.role}</p>
+                                      </div>
+                                    </>
+                                  )}
+
+                                  <div className="text-center mt-3">
+                                    <Button
+                                      style={{ border: "1px solid green", backgroundColor: "white", color: "green" }}
+                                      onClick={() => handleViewProfile(selectedUser.id)}
+                                      disabled={loading}
+                                    >
+                                      {selectedUser.gender === "Male" ? "View His Profile" : "View Her Profile"}
+                                    </Button>
+                                  </div>
+                                </div>
                               </div>
-                            </section>
-                          </>
+                            </div>
+                          </section>
                         )}
                       </Modal.Body>
                     </Modal>
@@ -709,6 +786,25 @@ const Dashboard = () => {
                             </select>
                           </div>
 
+                          <div className="form-group mt-3">
+                            <span>Department</span>
+                            <select
+                              name="departmentId"
+                              onChange={(e) => setSelectedUser({ ...selectedUser, departmentId: e.target.value })}
+                              className="form-control"
+                              required
+                              id=""
+                              value={selectedUser.departmentId}
+                            >
+                              <option value="">Select department</option>
+                              {departments.map((department) => (
+                                <option key={department.id} value={department.id}>
+                                  {department.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
                           <div className="text-center">
                             <button type="submit" className="form-control">
                               Save
@@ -725,34 +821,35 @@ const Dashboard = () => {
                             EmployeesAdmin.map((Employee) => (
                               <div onClick={() => handleView(Employee.id)} key={Employee.id} className="col-xl-4 col-md-6 " data-aos="fade-up" data-aos-delay={100 * Employee.id} style={{ padding: '' }}>
 
-                                <div className="member col-xl-12" style={{ padding: "0.4cm",border:'2px solid lightgreen' }}> <br />
+                                <div className="member col-xl-12" style={{ padding: "0.4cm", border: '2px solid lightgreen' }}> <br />
 
                                   {Employee.image && Employee.image !== 'null' ? (
-                                    <img src={Employee.image} className="img-fluid" alt="" style={{ borderRadius: '100%', height: '3.5cm', width: '3.5cm',border:'3px solid lightgreen' }} />
+                                    <img src={Employee.image} className="img-fluid" alt="" style={{ borderRadius: '100%', height: '3.5cm', width: '3.5cm', border: '3px solid lightgreen' }} />
                                   ) : (
-                                    <img src="/assets/img/images (3).png" className="img-fluid" alt="Default Image" style={{ borderRadius: '100%', height: '3.5cm', width: '3.5cm',color:'lightgreen' }} />
+                                    <img src="/assets/img/images (3).png" className="img-fluid" alt="Default Image" style={{ borderRadius: '100%', height: '3.5cm', width: '3.5cm', color: 'lightgreen' }} />
                                   )}
 
                                   <h4 style={{ textAlign: 'center' }}>{Employee.firstname} &nbsp;{Employee.lastname}</h4>
-                                  <p style={{width:'3cm',color:'white',textAlign:'center'}} className={`badge ${Employee.status === 'active' ? 'bg-success' : 'bg-warning'}`}>{Employee.status}</p><br/>
-                                                         
-                                                         <small className="text-muted" style={{backgroundColor:'white',border:'1px solid green',padding:'4px',borderRadius:'5px'}}>
-                                                                                 {formatDistanceToNow(new Date(Employee.createdAt), {
-                                                                                   addSuffix: true,
-                                                                                 })}
-                                                                               </small>
-                                  <p style={{ textAlign: 'center', fontStyle: '', fontPalette: '13px', backgroundColor: 'lightgreen',color:'black', padding: '0.4cm', marginTop: '20px', borderRadius: '6px' }}>
+                                  <p style={{ textAlign: 'center' }}>{Employee.role}</p>
+                                  <p style={{ width: '3cm', color: 'white', textAlign: 'center' }} className={`badge ${Employee.status === 'active' ? 'bg-success' : 'bg-warning'}`}>{Employee.status}</p><br />
+
+                                  <small className="text-muted" style={{ backgroundColor: 'white', border: '1px solid green', padding: '4px', borderRadius: '5px' }}>
+                                    {formatDistanceToNow(new Date(Employee.createdAt), {
+                                      addSuffix: true,
+                                    })}
+                                  </small>
+                                  <p style={{ textAlign: 'center', fontStyle: '', fontPalette: '13px', backgroundColor: 'lightgreen', color: 'black', padding: '0.4cm', marginTop: '20px', borderRadius: '6px' }}>
                                     <BiMap className="" style={{ color: 'black' }} />&nbsp;&nbsp;{Employee.address} <br />
                                     <BiEnvelope className="flex-shrink-0 bi bi-envelope flex-shrink-0" style={{ color: 'black' }} />&nbsp;&nbsp;{Employee.email} <br />
                                     <BiPhone />&nbsp;&nbsp;{Employee.phone}
                                   </p>
-                                  <button onClick={() => { handleModify(Employee.id); handleToggleModal1(); }} style={{ backgroundColor: 'white', border: '0px',color:'green' }}>
+                                  <button onClick={() => { handleModify(Employee.id); handleToggleModal1(); }} style={{ backgroundColor: 'white', border: '0px', color: 'green' }}>
                                     <FontAwesomeIcon icon={faEdit} style={{ Color: 'gray' }} />
                                   </button>
-                                  <button onClick={() => handleDelete(Employee.id)} style={{ backgroundColor: 'white',color:'red', border: '0px',}}>
+                                  <button onClick={() => handleDelete(Employee.id)} style={{ backgroundColor: 'white', color: 'red', border: '0px', }}>
                                     <FontAwesomeIcon icon={faTrash} style={{ Color: 'red' }} />
                                   </button>
-                                  <button style={{ backgroundColor: 'white', border: '0px',color:'orange'  }} onClick={() => { handleView(Employee.id); handleShowDetailModal(); }}>
+                                  <button style={{ backgroundColor: 'white', border: '0px', color: 'orange' }} onClick={() => { handleView(Employee.id); handleShowDetailModal(); }}>
                                     <FontAwesomeIcon icon={faEye} />
                                   </button>
                                   {renderActivationButton(Employee.id, Employee.status)}
