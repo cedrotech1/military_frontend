@@ -217,7 +217,7 @@ const MissionsPage = () => {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await fetch("http://localhost:7000/api/v1/mission/countries", {
+        const response = await fetch( `${process.env.REACT_APP_BASE_URL}/api/v1/mission/countries `, {
           headers: {
             accept: "*/*",
             Authorization: `Bearer ${TOKEN}`,
