@@ -302,7 +302,7 @@ const LandingPage = () => {
                                     </div>
                                 </div>
                                 <div className="d-flex justify-content-between">
-                                    <button type="submit" className="form-control" style={{ borderRadius: '10PX', backgroundColor: 'darkblue' }} disabled={loading}>
+                                    <button type="submit" className="form-control" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'green',margonTop:'0cm',borderRadius:'0.2cm' }} disabled={loading}>
                                         {loading ? <LoadingSpinner /> : ' Edit profile'}
                                     </button>
                                 </div>
@@ -321,9 +321,10 @@ const LandingPage = () => {
                                                     textDecoration: 'none',
                                                     padding: '0.2cm',
                                                     width: '5cm',
-                                                    color: 'black',
+                                                    color: 'green',
                                                     height: 'auto',
-                                                    fontSize: '15px'
+                                                    fontSize: '15px',
+                                                    border:'2px solid green'
                                                 }}
                                             >
                                                 CHANGE PASSWORD

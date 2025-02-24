@@ -256,7 +256,10 @@ const Dashboard = () => {
     address: '',
     password: '',
     confirmPassword: '',
-    departmentId: ''
+    departmentId: '',
+    rank: "",
+    armyid: "",
+    joindate: ""
 
   });
 
@@ -386,6 +389,7 @@ const Dashboard = () => {
   }, [value]);
 
   const handleViewProfile = (id) => { navigate(`../other_user-profile/${id}`); }
+  const handleViewUpload = () => { navigate(`../upload`); }
 
   const handleDepartmentChange = (e) => {
     const newDepartmentId = e.target.value;
@@ -458,7 +462,7 @@ const Dashboard = () => {
                     </section>
 
                     <div className="row" style={{ backgroundColor: 'whitesmoke' }}>
-                      <div className="col-xl-4 col-md-4" style={{ padding: '0.4cm' }}>
+                      <div className="col-xl-3 col-md-3" style={{ padding: '0.4cm' }}>
                         <input
                           placeholder='Filter here...'
                           variant=""
@@ -482,13 +486,41 @@ const Dashboard = () => {
                           }}
                         />
                       </div>
-                      <div className="col-xl-4 col-md-4" style={{ paddingRight: '0.4cm' }}>
+       
+                      <div className="col-xl-3 col-md-3" style={{ paddingRight: '0.4cm' }}>
                         <h4 style={{ textAlign: 'justify', paddingBottom: '0cm', color: 'gray', paddingLeft: '0.4cm' }}>LIST OF USERS </h4>
 
                       </div>
                   
 
                       <div className="col-xl-4 col-md-4" style={{ padding: '0.4cm' }}>
+                        <div style={{ textAlign: 'right', marginBottom: '0.4cm' }}>
+                          <Button
+                            variant=""
+                            onClick={() => handleViewUpload()}
+                            style={{
+                              backgroundColor: 'white',
+                              borderRadius: '6px',
+                              fontFamily: 'monospace',
+                              textDecoration: 'none',
+                              padding: '0.2cm',
+                              width: '4cm',
+
+                              // marginTop: '-2cm',
+                              marginRight: '0.3cm',
+                              color: 'black',
+                              height: 'auto',
+                              border: '2px solid lightgreen',
+
+
+                            }}
+                          >
+                            Upload Users
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="col-xl-2 col-md-2" style={{ padding: '0.4cm' }}>
                         <div style={{ textAlign: 'right', marginBottom: '0.4cm' }}>
                           <Button
                             variant=""
@@ -524,17 +556,17 @@ const Dashboard = () => {
                           <div className="row" style={{ paddingTop: '0cm' }}>
                             <div className="col-md-6 form-group">
                               <span>First Name</span>
-                              <input type="text" name="firstname" className="form-control" id="firstname" placeholder="Cedrick" onChange={handleChange} />
+                              <input type="text" name="firstname" className="form-control" id="firstname" placeholder="Uwase" onChange={handleChange} />
                             </div>
                             <div className="col-md-6 form-group mt-3 mt-md-0">
                               <span>Last Name</span>
-                              <input type="text" className="form-control" name="lastname" id="lastname" placeholder="Hakuzimana" onChange={handleChange} />
+                              <input type="text" className="form-control" name="lastname" id="lastname" placeholder="Mutoni" onChange={handleChange} />
                             </div>
                           </div>
 
                           <div className="form-group mt-3">
                             <span>Email</span>
-                            <input type="text" className="form-control" name="email" id="email" placeholder="cedrick@gmail.com" onChange={handleChange} />
+                            <input type="text" className="form-control" name="email" id="email" placeholder="mutoniwase@gmail.com" onChange={handleChange} />
                           </div>
 
                           <div className="form-group mt-3">
@@ -557,6 +589,38 @@ const Dashboard = () => {
                               <input type="text" className="form-control" name="address" id="address" placeholder="Huye/Ngoma" onChange={handleChange} />
                             </div>
                           </div>
+
+                    
+                          <div className="form-group mt-3">
+                            <span>Rank</span>
+                            <input type="text" className="form-control" required name="rank" id="rank" placeholder="General" onChange={handleChange} />
+                          </div>
+
+                          <div className="form-group mt-3">
+                            <span>Army ID</span>
+                            <input type="text" className="form-control" required name="armyid" id="armyid" placeholder="095454" onChange={handleChange} />
+                          </div>
+
+
+
+                          <div className="form-group mt-3">
+                            <span>join date</span>
+                            <input type="date" className="form-control" required name="joindate" id="joindate" onChange={handleChange} />
+                          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                           <div className="form-group mt-3">
                             <span>Role</span>
@@ -647,6 +711,11 @@ const Dashboard = () => {
                                   <p><strong>Gender:</strong> {selectedUser.gender}</p>
                                   <p><strong>Location:</strong> {selectedUser.address || "N/A"}</p>
 
+                                  <p><strong>rank:</strong> {selectedUser.rank}</p>
+                                  <p><strong>Army ID:</strong> {selectedUser.armyid}</p>
+                                  <p><strong>join date:</strong> {new Date(selectedUser.joindate).toLocaleDateString()}</p>
+
+
                                   {selectedUser.department && (
                                     <>
                                       <h3 className="mt-4">Department Info</h3>
@@ -695,7 +764,7 @@ const Dashboard = () => {
                                 name="firstname"
                                 className="form-control"
                                 id="firstname"
-                                placeholder="Cedrick"
+                                placeholder="Uwase"
                                 value={selectedUser.firstname}
                                 onChange={(e) => setSelectedUser({ ...selectedUser, firstname: e.target.value })}
                               />
@@ -707,7 +776,7 @@ const Dashboard = () => {
                                 className="form-control"
                                 name="lastname"
                                 id="lastname"
-                                placeholder="Hakuzimana"
+                                placeholder="Mutoni"
                                 value={selectedUser.lastname}
                                 onChange={(e) => setSelectedUser({ ...selectedUser, lastname: e.target.value })}
                               />
@@ -722,7 +791,7 @@ const Dashboard = () => {
                               className="form-control"
                               name="email"
                               id="email"
-                              placeholder="cedrick@gmail.com"
+                              placeholder="umutoni@gmail.com"
                               value={selectedUser.email}
                             />
                           </div>
@@ -737,6 +806,43 @@ const Dashboard = () => {
                               placeholder="0784366616"
                               value={selectedUser.phone}
                               onChange={(e) => setSelectedUser({ ...selectedUser, phone: e.target.value })}
+                            />
+                          </div>
+
+
+                          <div className="form-group mt-3">
+                            <span>rank</span>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="rank"
+                              id="rank"
+                               value={selectedUser.rank}
+                              onChange={(e) => setSelectedUser({ ...selectedUser, rank: e.target.value })}
+                            />
+                          </div>
+
+                          <div className="form-group mt-3">
+                            <span>Army ID</span>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="armyid"
+                              id="armyid"
+                               value={selectedUser.armyid}
+                              onChange={(e) => setSelectedUser({ ...selectedUser, armyid: e.target.value })}
+                            />
+                          </div>
+
+                          <div className="form-group mt-3">
+                            <span>Army ID</span>
+                            <input
+                              type="date"
+                              className="form-control"
+                              name="joindate"
+                              id="joindate"
+                               value={selectedUser.joindate}
+                              onChange={(e) => setSelectedUser({ ...selectedUser, joindate: e.target.value })}
                             />
                           </div>
 

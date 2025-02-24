@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Nav } from 'react-bootstrap';
 import { BsHouseDoor, BsFileBarGraph } from "react-icons/bs";
-import { BiUser, BiCategory, BiTask, BiCalendarCheck, BiCog, BiClipboard } from "react-icons/bi";
+import { BiUser, BiCategory, BiCalendarCheck, BiCog, BiWorld, BiBuilding, BiTargetLock } from "react-icons/bi";
+
 import '../css/main2.css';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -76,25 +77,22 @@ const LandingPage = () => {
 
   const unreadNotifications = notifications.filter((n) => !n.read).length;
 
-   const adminMenu = [
-     { name: 'Dashboard', icon: <BsHouseDoor />, to: '/resto_statistics' },
-     { name: 'Users', icon: <BiUser />, to: '/resto_dash' },
-     { name: 'Categories', icon: <BiCategory />, to: '/categories' }, 
-     { name: 'Missions', icon: <BiTask />, to: '/missions' }, 
-     { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
-     { name: 'Settings', icon: <BiCog />, to: '/settings' },
-     { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }
-   ];
- 
-   const officerMenu = [
-     { name: 'Dashboard', icon: <BsHouseDoor />, to: '/resto_statistics' },
-     { name: 'Users', icon: <BiUser />, to: '/resto_dash' },
-     { name: 'Categories', icon: <BiCategory />, to: '/categories' }, 
-     { name: 'Missions', icon: <BiTask />, to: '/missions' }, 
-     { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
-     { name: 'Settings', icon: <BiCog />, to: '/settings' },
-     { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }
-   ];
+    const adminMenu = [
+      { name: 'Dashboard', icon: <BsHouseDoor />, to: '/resto_statistics' },
+      { name: 'Users', icon: <BiUser />, to: '/resto_dash' },
+      { name: 'Categories', icon: <BiCategory />, to: '/categories' }, 
+      { name: 'Country', icon: <BiWorld />, to: '/country' }, 
+      { name: 'Department', icon: <BiBuilding />, to: '/department' }, 
+      { name: 'Settings', icon: <BiCog />, to: '/settings' },
+    ];
+  
+    const officerMenu = [
+      { name: 'Dashboard', icon: <BsHouseDoor />, to: '/resto_statistics' },
+      { name: 'Missions', icon: <BiTargetLock />, to: '/missions' }, 
+      { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
+      { name: 'Settings', icon: <BiCog />, to: '/settings' },
+      { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }
+    ];
 
   const getMenu = () => {
     switch (obj.role) {

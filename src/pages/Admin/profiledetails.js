@@ -152,7 +152,7 @@ const ProfilePage = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="text-center mb-4">Manage Profiles</h2>
+      <h2 className="text-center mb-4" style={{ border: '0px solid green', backgroundColor: 'lightgreen', color: 'green',margonTop:'0cm',padding:'0.2cm' }}>Manage Profiles</h2>
       <div className="row">
         <div className="col-md-6">
           <div className="card shadow-sm">
@@ -203,7 +203,7 @@ const ProfilePage = () => {
                     onChange={handleFileChange}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary w-100">
+                <button type="submit" className="btn  w-100" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'green',margonTop:'0cm' }}>
                   Add Profile
                 </button>
               </form>

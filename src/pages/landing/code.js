@@ -76,7 +76,7 @@
                   <div className="form-group">
                     <span>CODE</span>
 
-                    <input type="text" className="form-control" name="code" id="code" placeholder="Ex : 00000" onChange={handleChange} style={{ outline: 'none' }} />
+                    <input type="text" style={{ border: '1px solid green', backgroundColor: 'white', color: 'green',outline: 'none' }} className="form-control" name="code" id="code" placeholder="Ex : 00000" onChange={handleChange} />
                   </div>
 
 
@@ -84,7 +84,7 @@
 
 
                   <div className="text-center">
-                    <button type="submit" style={{ border: '1px solid green', backgroundColor: 'white', color: 'green',margonTop:'-1cm' }} className={`form-control ${loading ? 'loading' : ''}`} disabled={loading}>
+                    <button type="submit" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'green',margonTop:'0cm' }} className={`form-control ${loading ? 'loading' : ''}`} disabled={loading}>
                       {loading ? <LoadingSpinner /> : 'check code'}
                     </button>
                   </div>

@@ -86,13 +86,13 @@ const LandingPage = () => {
                 <div className="form-group mt-3">
                   <span>Email</span>
 
-                  <input type="text" className="form-control" name="email" id="email" placeholder="cedrick@gmail.com" onChange={handleChange} style={{ outline: 'none' }} />
+                  <input type="text" className="form-control" name="email" style={{ border: '1px solid green', backgroundColor: 'white', color: 'green',outline: 'none' }}   id="email" placeholder="umutoniwase@gmail.com" onChange={handleChange}/>
                 </div>
                 <br />
 
                 <div className="form-group mt-3">
                   <span>password</span>
-                  <input type="password" oninput="maskPassword()" className="form-control" name="password" id="subject" placeholder="************" onChange={handleChange} />
+                  <input type="password"  oninput="maskPassword()" className="form-control" style={{ border: '1px solid green', backgroundColor: 'white', color: 'green',margonTop:'-1cm' }}  name="password" id="subject" placeholder="************" onChange={handleChange} />
                 </div>
                 <div className="form-group mt-3">
                   <Link to='../forgot'> <b style={{ textAlign: 'center', color: 'green' }}>forgot password</b></Link>
@@ -100,7 +100,7 @@ const LandingPage = () => {
                 </div>
 
                 <div className="text-center">
-                  <button type="submit" style={{ border: '1px solid green', backgroundColor: 'white', color: 'green',margonTop:'-1cm' }} className={`form-control ${loading ? 'loading' : ''}`} disabled={loading}>
+                  <button type="submit" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'green',margonTop:'1cm' }} className={`form-control ${loading ? 'loading' : ''}`} disabled={loading}>
                     {loading ? <LoadingSpinner /> : 'Login'}
                   </button>
 

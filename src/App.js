@@ -51,6 +51,7 @@ import Code from "./pages/landing/code";
 import ResetPassword from "./pages/landing/resetPassword";
 import Members from "./pages/Admin/DepartmentMembersPage";
 import Country from "./pages/Admin/CountryPage";
+import Upload from "./pages/Admin/uploadpage";
 
 
 
@@ -111,6 +112,7 @@ function App() {
         <Route path="/department" element={<Department/>} exact={true} />
         <Route path="/members/:id" element={<Members/>} exact={true} />
         <Route path="/country" element={<Country/>} exact={true} />
+        <Route path="/upload" element={<Upload/>} exact={true} />
 
         
   

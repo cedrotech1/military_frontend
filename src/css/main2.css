@@ -10,7 +10,9 @@
 .loading {
   position: relative;
 }
-
+.myinput{
+  background-color: #000;
+}
 
 .form-control:focus {
   border: 1px solid green !important;

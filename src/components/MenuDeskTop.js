@@ -1,7 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Nav } from 'react-bootstrap';
 import { BsHouseDoor, BsFileBarGraph } from "react-icons/bs";
-import { BiUser, BiCategory, BiTask, BiCalendarCheck, BiCog, BiClipboard } from "react-icons/bi";
+import { BiUser, BiCategory, BiCalendarCheck, BiCog, BiWorld, BiBuilding, BiTargetLock } from "react-icons/bi";
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -63,19 +64,14 @@ const LandingPage = () => {
     { name: 'Dashboard', icon: <BsHouseDoor />, to: '/resto_statistics' },
     { name: 'Users', icon: <BiUser />, to: '/resto_dash' },
     { name: 'Categories', icon: <BiCategory />, to: '/categories' }, 
-    { name: 'Country', icon: <BiCategory />, to: '/country' }, 
-    { name: 'department', icon: <BiTask />, to: '/department' }, 
-    { name: 'Missions', icon: <BiTask />, to: '/missions' }, 
-    { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
+    { name: 'Country', icon: <BiWorld />, to: '/country' }, 
+    { name: 'Department', icon: <BiBuilding />, to: '/department' }, 
     { name: 'Settings', icon: <BiCog />, to: '/settings' },
-    { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }
   ];
 
   const officerMenu = [
     { name: 'Dashboard', icon: <BsHouseDoor />, to: '/resto_statistics' },
-    { name: 'Users', icon: <BiUser />, to: '/resto_dash' },
-    { name: 'Categories', icon: <BiCategory />, to: '/categories' }, 
-    { name: 'Missions', icon: <BiTask />, to: '/missions' }, 
+    { name: 'Missions', icon: <BiTargetLock />, to: '/missions' }, 
     { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
     { name: 'Settings', icon: <BiCog />, to: '/settings' },
     { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }
@@ -93,16 +89,16 @@ const LandingPage = () => {
   };
 
   return (
-    <div style={{ border: '0px solid green', backgroundColor: 'white', color: 'green',margonTop:'1cm' }} className="col-md-2 d-none d-md-block sidebar  border-end position-fixed vh-100"
-   
-    >
+    <div style={{ border: '0px solid green', backgroundColor: 'white', color: 'green', marginTop: '1cm' }} 
+         className="col-md-2 d-none d-md-block sidebar border-end position-fixed vh-100">
+      
       <div className="text-center">
         <Link to="/settings">
           <img 
             src={obj.image && obj.image !== 'null' ? obj.image : "/assets/img/images (3).png"} 
             className="rounded-circle mb-3" 
             alt="User" 
-            style={{ height: '3cm', width: '3cm',marginTop:'0.5cm' }} 
+            style={{ height: '3cm', width: '3cm', marginTop: '0.5cm' }} 
           />
         </Link>
         <h6 className="fw-bold">{obj.firstname} {obj.lastname}</h6>
@@ -123,7 +119,7 @@ const LandingPage = () => {
       <Nav className="flex-column mt-2">
         <ul className="list-unstyled">
           {getMenu().map((menuItem, index) => (
-            <li key={index} className="">
+            <li key={index}>
               <Link to={menuItem.to} className="nav-link d-flex align-items-center text-dark">
                 <span className="me-2">{menuItem.icon}</span> {menuItem.name}
               </Link>
@@ -133,7 +129,8 @@ const LandingPage = () => {
       </Nav>
 
       <div className="text-center mt-3">
-        <Link to="/logout" className="btn btn-sm" style={{border: '1px solid lightgreen', backgroundColor: 'lightgreen', color: 'black',margonTop:'1cm',width:'80%' }}>
+        <Link to="/logout" className="btn btn-sm" 
+              style={{ border: '1px solid lightgreen', backgroundColor: 'lightgreen', color: 'black', marginTop: '', width: '80%' }}>
           Logout
         </Link>
       </div>

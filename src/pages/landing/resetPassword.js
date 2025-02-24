@@ -75,13 +75,13 @@ function App() {
                 <br/>
                 <div className="form-group mt-3">
                   <span>new password</span>
-                  <input type="password" oninput="maskPassword()" className="form-control" name="newPassword" id="subject" placeholder="************" onChange={handleChange} />
+                  <input type="password" style={{ border: '1px solid green', backgroundColor: 'white', color: 'green',outline: 'none' }} oninput="maskPassword()" className="form-control" name="newPassword" id="subject" placeholder="************" onChange={handleChange} />
                 </div>
                 <br/>
 
                 <div className="form-group mt-3">
                   <span>confirm password</span>
-                  <input type="password" oninput="maskPassword()" className="form-control" name="confirmPassword" id="subject" placeholder="************" onChange={handleChange} />
+                  <input type="password" oninput="maskPassword()" style={{ border: '1px solid green', backgroundColor: 'white', color: 'green',outline: 'none' }} className="form-control" name="confirmPassword" id="subject" placeholder="************" onChange={handleChange} />
                 </div>
                 <div className="form-group mt-3">
                 <Link to='../forgot'> <b style={{textAlign:'center',color:'brown'}}> go back to get reset code</b></Link> 
@@ -89,7 +89,7 @@ function App() {
                 </div>
 
                 <div className="text-center">
-                <button type="submit" style={{ border: '1px solid green', backgroundColor: 'white', color: 'green',margonTop:'-1cm' }} className={`form-control ${loading ? 'loading' : ''}`} disabled={loading}>
+                <button type="submit" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'green',margonTop:'0cm' }} className={`form-control ${loading ? 'loading' : ''}`} disabled={loading}>
               {loading ? <LoadingSpinner /> : 'Login'}
             </button>
                   </div>
