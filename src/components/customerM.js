@@ -160,7 +160,7 @@ const LandingPage = () => {
                 <Link to="/list" style={{ color: 'black', fontFamily: 'monospace', fontSize: '20px' }}>Missions</Link>
               </li>
               <li>
-                <Link to="/mycards" style={{ color: 'black', fontFamily: 'monospace', fontSize: '20px' }}>My Appoitments</Link>
+                <Link to="/appoitments" style={{ color: 'black', fontFamily: 'monospace', fontSize: '20px' }}>My Appoitments</Link>
               </li>
               <li>
                 <Link to="/profile" style={{ color: 'black', fontFamily: 'monospace', fontSize: '20px' }}>Profile</Link>
