@@ -119,7 +119,7 @@ const LandingPage = () => {
               <Nav className="flex-column">
                 {/* <Link to="/" className="nav-link">Home</Link> */}
                 <Link to="/list" className="nav-link">Missions</Link>
-                <Link to="/mycards" className="nav-link">My Appoitments</Link>
+                <Link to="/appoitments" className="nav-link">My Appoitments</Link>
                 <Link to="/profile" className="nav-link">Profile</Link>
 
               </Nav>
