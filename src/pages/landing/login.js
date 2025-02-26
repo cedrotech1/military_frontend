@@ -43,9 +43,9 @@ const LandingPage = () => {
         if (role === 'user') {
           await navigate('../list');
         } else if (role === 'admin') {
-          await navigate('../resto_dash');
+          await navigate('../dashboard');
         } else if (role === 'Commander-Officer') {
-          await navigate('../resto_dash');
+          await navigate('../dashboard');
         }
       } else {
         const errorData = await response.json();
@@ -100,7 +100,7 @@ const LandingPage = () => {
                 </div>
 
                 <div className="text-center">
-                  <button type="submit" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'green',margonTop:'1cm' }} className={`form-control ${loading ? 'loading' : ''}`} disabled={loading}>
+                  <button type="submit" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'green',margonTop:'0cm' }} className={`form-control ${loading ? 'loading' : ''}`} disabled={loading}>
                     {loading ? <LoadingSpinner /> : 'Login'}
                   </button>
 

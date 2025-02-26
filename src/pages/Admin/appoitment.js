@@ -50,7 +50,7 @@ const Dashboard = () => {
                             ☰
                           </Button>
                         </div>
-                        <Statistics />
+                        <Statistics style={{marginTop:'1cm'}}/>
                         <div style={{marginTop:'-1cm'}}> 
                      
                         <Appoitment />

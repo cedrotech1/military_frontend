@@ -77,22 +77,22 @@ const LandingPage = () => {
 
   const unreadNotifications = notifications.filter((n) => !n.read).length;
 
-    const adminMenu = [
-      { name: 'Dashboard', icon: <BsHouseDoor />, to: '/resto_statistics' },
-      { name: 'Users', icon: <BiUser />, to: '/resto_dash' },
-      { name: 'Categories', icon: <BiCategory />, to: '/categories' }, 
-      { name: 'Country', icon: <BiWorld />, to: '/country' }, 
-      { name: 'Department', icon: <BiBuilding />, to: '/department' }, 
-      { name: 'Settings', icon: <BiCog />, to: '/settings' },
-    ];
-  
-    const officerMenu = [
-      { name: 'Dashboard', icon: <BsHouseDoor />, to: '/resto_statistics' },
-      { name: 'Missions', icon: <BiTargetLock />, to: '/missions' }, 
-      { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
-      { name: 'Settings', icon: <BiCog />, to: '/settings' },
-      { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }
-    ];
+     const adminMenu = [
+       { name: 'Dashboard', icon: <BsHouseDoor />, to: '/dashboard' },
+       { name: 'Users', icon: <BiUser />, to: '/resto_dash' },
+       { name: 'Categories', icon: <BiCategory />, to: '/categories' }, 
+       { name: 'Country', icon: <BiWorld />, to: '/country' }, 
+       { name: 'Department', icon: <BiBuilding />, to: '/department' }, 
+       { name: 'Settings', icon: <BiCog />, to: '/settings' },
+     ];
+   
+     const officerMenu = [
+       { name: 'Dashboard', icon: <BsHouseDoor />, to: '/dashboard' },
+       { name: 'Missions', icon: <BiTargetLock />, to: '/missions' }, 
+       { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
+       { name: 'Settings', icon: <BiCog />, to: '/settings' },
+       { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }
+     ];
 
   const getMenu = () => {
     switch (obj.role) {

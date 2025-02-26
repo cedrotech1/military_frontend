@@ -240,6 +240,16 @@ const LandingPage = () => {
                                 <div className="info-item " style={{ backgroundColor: 'whitesmoke', color: 'black' }}>
                                     <div>
                                         <h4 style={{ textAlign: 'center' }}>{formData.firstname} &nbsp;{formData.lastname}  </h4>
+
+                                        <p>
+                                        Rank: {formData.rank} 
+                                        <hr/>
+                                        Army ID: {formData.armyid} <br />
+                                        <hr/>
+                                        Join Date {new Date(formData.joindate).toLocaleDateString()} <br />
+
+
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="info-item d-flex" style={{ backgroundColor: 'whitesmoke', color: 'black' }}>

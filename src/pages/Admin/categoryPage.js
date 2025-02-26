@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {  Offcanvas, Button, Nav } from 'react-bootstrap';
 import '../../css/main2.css';
-import Cate from "./viewCate";
+import Cate from "./viewCategory";
 import Statistics from "../../components/statistics-component";
 
 import Menu from "../../components/MenuDeskTop";
