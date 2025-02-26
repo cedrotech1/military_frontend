@@ -61,8 +61,7 @@ const LandingPage = () => {
   }, []);
 
   const adminMenu = [
-    { name: 'Dashboard', icon: <BsHouseDoor />, to: '/dashboard' },
-    { name: 'Users', icon: <BiUser />, to: '/resto_dash' },
+    { name: 'Users', icon: <BsHouseDoor />, to: '/dashboard' },
     { name: 'Categories', icon: <BiCategory />, to: '/categories' }, 
     { name: 'Country', icon: <BiWorld />, to: '/country' }, 
     { name: 'Department', icon: <BiBuilding />, to: '/department' }, 
@@ -70,7 +69,7 @@ const LandingPage = () => {
   ];
 
   const officerMenu = [
-    { name: 'Dashboard', icon: <BsHouseDoor />, to: '/dashboard' },
+    { name: 'Dashboard', icon: <BsHouseDoor />, to: '/missions' },
     { name: 'Missions', icon: <BiTargetLock />, to: '/missions' }, 
     { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
     { name: 'Settings', icon: <BiCog />, to: '/settings' },
