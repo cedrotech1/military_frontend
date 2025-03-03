@@ -46,7 +46,7 @@ const MissionsPage = () => {
   };
 
   useEffect(() => {
-    fetchCategories();
+
     fetchMissions();
   }, []);
 
@@ -56,21 +56,7 @@ const MissionsPage = () => {
     setCurrentMissions(missions.slice(indexOfFirstMission, indexOfLastMission));
   }, [missions, currentPage]);
 
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/categories`, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${TOKEN}`, Accept: "*/*" },
-      });
 
-      if (!response.ok) throw new Error("Failed to fetch categories");
-
-      const data = await response.json();
-      setCategories(data.data);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
 
   const fetchMissions = async () => {
     setLoading(true);
@@ -85,7 +71,7 @@ const MissionsPage = () => {
       const data = await response.json();
       setMissions(data.data);
     } catch (error) {
-      toast.error(error.message);
+      // toast.error(error.message);
     } finally {
       setLoading(false);
     }

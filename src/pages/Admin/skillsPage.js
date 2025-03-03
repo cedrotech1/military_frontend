@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Offcanvas, Button, Nav } from 'react-bootstrap';
 import '../../css/main2.css';
-import Profile from "../../components/profile";
+import Skills from "./manage_skills";
 import Statistics from "../../components/statistics-component";
-import ProfileDetails from "./profiledetails";
+import Missions from "./manageMissions";
 import Menu from "../../components/MenuDeskTop";
 import Menu2 from "../../components/MenuMobile";
 const Dashboard = () => {
@@ -51,9 +51,9 @@ const Dashboard = () => {
                           </Button>
                         </div>
                         <Statistics />
-                        <div style={{marginTop:'2cm'}}> 
-                        <Profile  />
-                        {/* <ProfileDetails /> */}
+                        <div style={{marginTop:'-1cm'}}> 
+                     
+                        <Skills />
                         </div>
                        
                       </div>

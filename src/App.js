@@ -3,8 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Importing components from the landing pages
 import Home from "./pages/landing/home";
-import Contact from "./pages/landing/contact";
-import About from "./pages/landing/about";
 import Login from "./pages/landing/login";
 import NotFound from './pages/landing/notfound';
 import Logout from './pages/landing/logout';
@@ -18,10 +16,10 @@ import Prof from "./pages/user/user-profile";
 
 
 // Importing components from the Admin resto pages
-import Dasha from "./pages/Admin/homePage";
+import UsersPage from "./pages/Admin/usersPage";
 import Statisticsa from "./pages/Admin/statistics";
 import Setting from "./pages/Admin/user-profile";
-import OurCate from "./pages/Admin/categoryPage";
+import Batarians from "./pages/Admin/batarians";
 import Department from "./pages/Admin/DepartmentPage";
 
 
@@ -33,7 +31,7 @@ import Missions from "./pages/Admin/missions";
 import Appoitment from "./pages/Admin/appoitment";
 import Notifications from "./pages/Admin/notifications";
 import Mynotification from "./pages/user/notification";
-import OtherProfile from "./pages/Admin/other_user-profile";
+import OtherProfile from "./pages/Admin/Sordierskills_management_page";
 import Report from "./pages/Admin/report";
 import Forgot from "./pages/landing/reset";
 import Code from "./pages/landing/code";
@@ -41,6 +39,9 @@ import ResetPassword from "./pages/landing/resetPassword";
 import Members from "./pages/Admin/DepartmentMembersPage";
 import Country from "./pages/Admin/CountryPage";
 import Upload from "./pages/Admin/uploadpage";
+import Skills from "./pages/Admin/skillsPage";
+
+import Assign_appoitment from "./pages/Admin/AssignAppoitment_to_batarian_page";
 
 
 
@@ -64,11 +65,12 @@ function App() {
         <Route path="/resetPassword/:email" element={<ResetPassword/>} exact={true} />
         <Route path="*" element={<NotFound />} />
 
-        {/* Admin Resto Pages */}
-        <Route path="/dashboard" element={<Dasha />} exact={true} />
+
+        <Route path="/users" element={<UsersPage />} exact={true} />
+        <Route path="/skills" element={<Skills />} exact={true} />
         <Route path="/dashboard" element={<Statisticsa />} exact={true} />
         <Route path="/settings" element={<Setting />} exact={true} />
-        <Route path="/categories" element={<OurCate/>} exact={true} />
+        <Route path="/batarians" element={<Batarians/>} exact={true} />
 
 
         <Route path="/missions" element={<Missions/>} exact={true} />
@@ -81,6 +83,8 @@ function App() {
         <Route path="/members/:id" element={<Members/>} exact={true} />
         <Route path="/country" element={<Country/>} exact={true} />
         <Route path="/upload" element={<Upload/>} exact={true} />
+
+        <Route path="/assign_appoitment" element={<Assign_appoitment/>} exact={true} />
 
         
   

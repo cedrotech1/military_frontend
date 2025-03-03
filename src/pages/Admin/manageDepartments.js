@@ -9,12 +9,14 @@ import { useNavigate } from "react-router-dom";
 const ManageDepartments = () => {
   const [readers, setReaders] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [batarians, setBatarians] = useState([]); // New state for batarians
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [readerId, setReaderId] = useState("");
+  const [batarianId, setBatarianId] = useState(""); // State for selected batarian
   const [editDepartmentId, setEditDepartmentId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [departmentsPerPage] = useState(5); // Set the number of departments per page
+  const [departmentsPerPage] = useState(5);
   const token = localStorage.getItem("token");
   const apiUrl = `${process.env.REACT_APP_BASE_URL}/api/v1`;
   const navigate = useNavigate();
@@ -22,6 +24,7 @@ const ManageDepartments = () => {
   useEffect(() => {
     fetchReaders();
     fetchDepartments();
+    fetchBatarians(); // Fetch batarians as well
   }, []);
 
   const fetchReaders = async () => {
@@ -41,16 +44,28 @@ const ManageDepartments = () => {
       const response = await axios.get(`${apiUrl}/department/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setDepartments(response.data.data);
+      setDepartments(response.data);
     } catch (error) {
       toast.error("Error fetching departments");
       console.error(error);
     }
   };
 
+  const fetchBatarians = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/batarian/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setBatarians(response.data.data); // Store batarians
+    } catch (error) {
+      toast.error("Error fetching batarians");
+      console.error(error);
+    }
+  };
+
   const addOrUpdateDepartment = async () => {
-    if (!name || !description || !readerId) {
-      toast.error("All fields are required, especially the Leader!");
+    if (!name || !description || !readerId || !batarianId) {
+      toast.error("All fields are required, including the Batarian!");
       return;
     }
     try {
@@ -58,14 +73,14 @@ const ManageDepartments = () => {
       if (editDepartmentId) {
         response = await axios.put(
           `${apiUrl}/department/${editDepartmentId}`,
-          { name, description, readerId },
+          { name, description, readerId, batarianId }, // Include batarianId
           { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
         );
         toast.success("Department updated successfully!");
       } else {
         response = await axios.post(
           `${apiUrl}/department/add`,
-          { name, description, readerId },
+          { name, description, readerId, batarianId }, // Include batarianId
           { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
         );
         toast.success("Department added successfully!");
@@ -77,10 +92,10 @@ const ManageDepartments = () => {
       }
 
       fetchDepartments();
-
       setName("");
       setDescription("");
       setReaderId("");
+      setBatarianId(""); // Clear batarianId
       setEditDepartmentId(null);
     } catch (error) {
       const errorMsg = error.response?.data?.message || "An error occurred";
@@ -114,9 +129,9 @@ const ManageDepartments = () => {
     setName(dept.name);
     setDescription(dept.description);
     setReaderId(dept.readerId);
+    setBatarianId(dept.batarianId); // Set batarianId for editing
   };
 
-  // Pagination logic
   const indexOfLastDept = currentPage * departmentsPerPage;
   const indexOfFirstDept = indexOfLastDept - departmentsPerPage;
   const currentDepartments = departments.slice(indexOfFirstDept, indexOfLastDept);
@@ -124,8 +139,6 @@ const ManageDepartments = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const totalPages = Math.ceil(departments.length / departmentsPerPage);
-
-
 
   return (
     <div className="container mt-4">
@@ -152,6 +165,14 @@ const ManageDepartments = () => {
                   ))}
                 </select>
               </div>
+              <div className="mb-3">
+                <select className="form-control" value={batarianId} onChange={(e) => setBatarianId(e.target.value)}>
+                  <option value="">Select Batarian (Required)</option>
+                  {batarians.map((batarian) => (
+                    <option key={batarian.id} value={batarian.id}>{batarian.name}</option>
+                  ))}
+                </select>
+              </div>
               <button className="btn btn-primary w-100" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'black', margonTop: '-1cm' }} onClick={addOrUpdateDepartment}>
                 {editDepartmentId ? "Update Department" : "Add Department"}
               </button>
@@ -175,8 +196,8 @@ const ManageDepartments = () => {
                     <tr>
                       <th>#</th>
                       <th>Name</th>
-                      {/* <th>Description</th> */}
-                      <th>Landingeader</th>
+                      <th>Leader</th>
+                      <th>Batarian</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -185,10 +206,10 @@ const ManageDepartments = () => {
                       <tr key={dept.id}>
                         <td>{index + 1}</td>
                         <td>{dept.name}</td>
-                        {/* <td>{dept.description}</td> */}
                         <td>{dept.reader?.firstname} {dept.reader?.lastname}</td>
+                        <td>{dept.batarian?.name}</td>
                         <td>
-                          <button className="btn  btn-sm me-2"  style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'black', margonTop: '-1cm' }} onClick={() => handleEditDepartment(dept)}>
+                          <button className="btn btn-sm me-2" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'black' }} onClick={() => handleEditDepartment(dept)}>
                             Edit
                           </button>
                           <button className="btn btn-danger btn-sm" onClick={() => deleteDepartment(dept.id)}>
@@ -196,10 +217,10 @@ const ManageDepartments = () => {
                           </button>
                           <button
                             onClick={() => navigate(`/members/${dept.id}`)}
-                           className="btn  btn-sm m-1"
-                           style={{ border: '1px solid green', backgroundColor: 'lightblue', color: 'black', margonTop: '-1cm' }}
+                            className="btn btn-sm m-1"
+                            style={{ border: '1px solid green', backgroundColor: 'lightblue', color: 'black' }}
                           >
-                            View 
+                            View Members
                           </button>
                         </td>
                       </tr>
@@ -210,10 +231,9 @@ const ManageDepartments = () => {
                 <p className="text-muted">No departments found.</p>
               )}
 
-              {/* Pagination Component */}
-              <Pagination >
+              <Pagination>
                 {[...Array(totalPages)].map((_, index) => (
-                  <Pagination.Item   key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
+                  <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
                     {index + 1}
                   </Pagination.Item>
                 ))}

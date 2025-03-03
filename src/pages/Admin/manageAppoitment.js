@@ -3,6 +3,7 @@ import { Table, Button, Modal, Form, Pagination, Card } from 'react-bootstrap';
 import { toast } from "react-toastify";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const AppointmentsPage = () => {
     const [users, setUsers] = useState([]);
@@ -17,6 +18,7 @@ const AppointmentsPage = () => {
     const [showAssignModal, setShowAssignModal] = useState(false);
     const itemsPerPage = 4;
     const token = localStorage.getItem("token");
+
 
 
     useEffect(() => {
@@ -188,12 +190,23 @@ const AppointmentsPage = () => {
         setLoading1(false);
     };
 
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+      // Your existing logic to open the modal
+      setShowAssignModal(true);
+  
+      // Navigate to another page (e.g., '/new-page')
+      navigate('/assign_appoitment');
+    };
+  
+
     return (
         <div className="container member mt-4">
             <h2 className="text-center mb-4" style={{ backgroundColor: 'lightgreen', padding: '0.3cm', color: 'black', borderRadius: '6px' }}>Manage Appoitments</h2>
 
             <div className="d-flex justify-content-end" style={{ marginBottom: '0.5cm' }}>
-                <Button onClick={() => setShowAssignModal(true)} style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margonTop: '-1cm' }}>Assign mission to user</Button>
+            <Button    onClick={handleClick} style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margin: '0.1cm' }}>Assign mission to Batarian</Button> <Button onClick={() => setShowAssignModal(true)} style={{ border: '1px solid green', backgroundColor: 'white', color: 'green',margin: '0.1cm' }}>Assign mission to user</Button>
             </div>
 
             <Form.Control style={{ backgroundColor: 'whitesmoke', padding: '0.3cm', color: 'black', borderRadius: '6px' }} type="text" placeholder="Search..." onChange={handleSearch} className="mb-3" />

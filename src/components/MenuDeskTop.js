@@ -61,16 +61,18 @@ const LandingPage = () => {
   }, []);
 
   const adminMenu = [
-    { name: 'Users', icon: <BsHouseDoor />, to: '/dashboard' },
-    { name: 'Categories', icon: <BiCategory />, to: '/categories' }, 
-    { name: 'Country', icon: <BiWorld />, to: '/country' }, 
-    { name: 'Department', icon: <BiBuilding />, to: '/department' }, 
+    { name: 'Overview', icon: <BsHouseDoor />, to: '/dashboard' },
+    { name: 'Manage Users', icon: <BsHouseDoor />, to: '/users' },
+    { name: 'Manage Skills', icon: <BiWorld />, to: '/skills' }, 
+    { name: 'Manage Departments', icon: <BiBuilding />, to: '/department' }, 
+    { name: 'Manage Batarians', icon: <BiBuilding />, to: '/batarians' }, 
     { name: 'Settings', icon: <BiCog />, to: '/settings' },
   ];
 
   const officerMenu = [
-    { name: 'Dashboard', icon: <BsHouseDoor />, to: '/missions' },
-    { name: 'Missions', icon: <BiTargetLock />, to: '/missions' }, 
+    { name: 'Dashboard', icon: <BsHouseDoor />, to: '/dashboard' },
+    { name: 'Missions', icon: <BiTargetLock />, to: '/missions' },
+    { name: 'Country Missions', icon: <BiWorld />, to: '/country' }, 
     { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
     { name: 'Settings', icon: <BiCog />, to: '/settings' },
     { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }

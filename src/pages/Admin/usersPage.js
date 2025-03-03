@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {  Offcanvas, Button, Nav } from 'react-bootstrap';
+import { Modal, Offcanvas, Button, Nav } from 'react-bootstrap';
 import '../../css/main2.css';
-import Cate from "./viewCategory";
+import Skills from "./manage_skills";
 import Statistics from "../../components/statistics-component";
-
+import Users from "./manageUsers";
 import Menu from "../../components/MenuDeskTop";
 import Menu2 from "../../components/MenuMobile";
 const Dashboard = () => {
@@ -51,7 +51,11 @@ const Dashboard = () => {
                           </Button>
                         </div>
                         <Statistics />
-                        <Cate />
+                        <div style={{marginTop:'-1cm'}}> 
+                        <Users />
+                    
+                        </div>
+                       
                       </div>
                     </div>
                   </section>

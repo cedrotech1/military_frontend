@@ -24,7 +24,7 @@ const DepartmentCard = () => {
         }
 
         const data = await response.json();
-        setDepartment(data.data);
+        setDepartment(data); // Set the entire response as department data
       } catch (err) {
         setError(err.message);
       } finally {

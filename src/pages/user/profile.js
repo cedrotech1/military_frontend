@@ -5,7 +5,7 @@ import { BiEnvelope, BiPhone, BiMap } from 'react-icons/bi';
 import { Modal, Button } from 'react-bootstrap';
 import { FaInfoCircle } from 'react-icons/fa';
 import LoadingSpinner from '../../components/loading';
-import ProfileDetailsUser from "../user/profiledetails";
+import Skills from "./skills";
 
 const LandingPage = () => {
     const [formData, setFormData] = useState({
@@ -187,7 +187,7 @@ const LandingPage = () => {
             <section id="contact" className="contact" style={{ marginTop: '-2cm' }}>
                 <div className="container-fluid" data-aos="fade-up">
                     <div className="row gx-lg-0 gy-4">
-                        <div className="col-lg-4" style={{ fontFamily: 'cursive' }}>
+                        <div className="col-lg-5" style={{ fontFamily: 'cursive' }}>
                             <div className="info-container d-flex flex-column align-items-center justify-content-center" style={{ backgroundColor: 'white', fontFamily: 'arial' }}>
                                 <div className="info-itemx d-flex">
                                     <div>
@@ -272,8 +272,8 @@ const LandingPage = () => {
                             </div>
                         </div>
 
-                        <div className="col-lg-8">
-                            <ProfileDetailsUser />
+                        <div className="col-lg-6">
+                            <Skills />
 
 
                         </div>

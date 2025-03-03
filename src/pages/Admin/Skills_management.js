@@ -5,7 +5,7 @@ import '../../css/main2.css';
 import Profile from "../../components/profile";
 import { useNavigate, useParams } from 'react-router-dom';
 import Statistics from "../../components/statistics-component";
-import ProfileDetails from "./other-profiledetails";
+import SkillsPage from "./other-profiledetails";
 import Menu from "../../components/MenuDeskTop";
 import Menu2 from "../../components/MenuMobile";
 const Dashboard = () => {
@@ -56,7 +56,7 @@ const Dashboard = () => {
                         <Statistics />
                         <div style={{marginTop:'2cm'}}> 
                         
-                        <ProfileDetails />
+                        <SkillsPage />
                         </div>
                        
                       </div>

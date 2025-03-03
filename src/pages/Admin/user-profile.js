@@ -53,7 +53,7 @@ const Dashboard = () => {
                         <Statistics />
                         <div style={{marginTop:'2cm'}}> 
                         <Profile  />
-                        <ProfileDetails />
+                        {/* <ProfileDetails /> */}
                         </div>
                        
                       </div>

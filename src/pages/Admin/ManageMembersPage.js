@@ -18,7 +18,7 @@ const DepartmentDetails = () => {
           method: "GET",
           headers: {
             "Accept": "*/*",
-             Authorization: `Bearer ${token}` 
+            "Authorization": `Bearer ${token}`
           }
         });
 
@@ -60,8 +60,8 @@ const DepartmentDetails = () => {
       <Card className="shadow-sm p-2" style={{ maxWidth: "500px", marginLeft: "0", fontSize: "14px" }}>
         <Card.Body className="text-start">
           <h5 className="mb-1"> <u>Department Information</u></h5>
-         <br/>
-          <h5 className="mb-1">department code({department.id})</h5>
+          <br />
+          <h5 className="mb-1">Department Code ({department.id})</h5>
           <h5 className="text-primary mb-1">{department.name}</h5>
           <p className="text-muted small">{department.description}</p>
           <hr />
@@ -89,14 +89,14 @@ const DepartmentDetails = () => {
 
           <h5 className="mb-1">Department Members</h5>
           <p><strong>Total Members:</strong> {department.members.length}</p>
-          <Button variant="primary" onClick={() => navigate(`/department`)}>Back</Button>
+          <Button variant="primary" onClick={() => navigate("/department")}>Back</Button>
         </Card.Body>
       </Card>
 
       <Card className="mt-4 shadow-sm p-3">
         <Card.Body>
           <h5 className="mb-3">Members List</h5>
-          <Table striped  hover size="sm">
+          <Table striped hover size="sm">
             <thead>
               <tr>
                 <th>#</th>

@@ -3,8 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Offcanvas, Button, Nav } from 'react-bootstrap';
 import '../../css/main2.css';
 import Profile from "../../components/profile";
+import { useNavigate, useParams } from 'react-router-dom';
 import Statistics from "../../components/statistics-component";
-import ProfileDetails from "./profiledetails";
+import SkillsPage from "./other-profiledetails";
 import Menu from "../../components/MenuDeskTop";
 import Menu2 from "../../components/MenuMobile";
 const Dashboard = () => {
@@ -16,6 +17,8 @@ const Dashboard = () => {
   const handleCloseModal = () => {
     setShowModal(false);
   };
+    const { id } = useParams();
+    // console.log(id)
 
   return (
     <body className='mybody'>
@@ -52,8 +55,8 @@ const Dashboard = () => {
                         </div>
                         <Statistics />
                         <div style={{marginTop:'2cm'}}> 
-                        <Profile  />
-                        {/* <ProfileDetails /> */}
+                        
+                        <SkillsPage />
                         </div>
                        
                       </div>
