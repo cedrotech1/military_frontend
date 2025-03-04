@@ -63,6 +63,7 @@ const LandingPage = () => {
   const adminMenu = [
     { name: 'Overview', icon: <BsHouseDoor />, to: '/dashboard' },
     { name: 'Manage Users', icon: <BsHouseDoor />, to: '/users' },
+    { name: 'Manage Soldier', icon: <BsHouseDoor />, to: '/soldier' },
     { name: 'Manage Skills', icon: <BiWorld />, to: '/skills' }, 
     { name: 'Manage Departments', icon: <BiBuilding />, to: '/department' }, 
     { name: 'Manage Batarians', icon: <BiBuilding />, to: '/batarians' }, 

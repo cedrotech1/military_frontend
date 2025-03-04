@@ -11,10 +11,13 @@ const UsersPage = () => {
         lastname: "",
         email: "",
         phone: "",
-        role: "admin",
+        role: "user",
         gender: "",
         address: "",
-        armyid: Math.random().toString(36).substring(2, 8),  // Generate a string armyid
+        departmentId: "",
+        rank: "",
+        armyid: "",
+        joindate: "",
     });
     const [editingUserId, setEditingUserId] = useState(null);
     const [error, setError] = useState("");
@@ -33,7 +36,7 @@ const UsersPage = () => {
             .then((res) => {
                 // Filter users based on role
                 const filteredUsers = res.data.users.filter(
-                    (user) => user.role === "admin" 
+                    (user) => user.role === "user" || user.role === "Commander-Officer"
                 );
                 setUsers(filteredUsers);
             })
@@ -46,17 +49,10 @@ const UsersPage = () => {
             .then((res) => setDepartments(res.data))
             .catch((err) => setError("Error fetching departments: " + err.response?.data?.message || err.message));
     }, []);
+    
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const generateArmyId = () => {
-        const randomId = Math.random().toString(36).substring(2, 8);  // Generate string armyid
-        setFormData(prevState => ({
-            ...prevState,
-            armyid: randomId
-        }));
     };
 
     const handleSubmit = (e) => {
@@ -65,7 +61,7 @@ const UsersPage = () => {
         setSuccess("");
 
         // Check if all required fields are filled
-        if (!formData.firstname || !formData.lastname || !formData.email || !formData.gender || !formData.role) {
+        if (!formData.firstname || !formData.lastname || !formData.email || !formData.gender || !formData.departmentId || !formData.role) {
             setError("Please fill in all required fields!");
             return;
         }
@@ -94,10 +90,13 @@ const UsersPage = () => {
                     lastname: "",
                     email: "",
                     phone: "",
-                    role: "admin",
+                    role: "",
                     gender: "",
                     address: "",
-                    armyid: Math.random().toString(36).substring(2, 8),  // Generate new string armyid
+                    departmentId: "",
+                    rank: "",
+                    armyid: "",
+                    joindate: "",
                 });
                 setEditingUserId(null);
             })
@@ -130,14 +129,15 @@ const UsersPage = () => {
     const handleViewProfile = (id) => { navigate(`../other_user-profile/${id}`); }
 
     const handleClick = () => {
+        
         navigate('/upload');
-    };
+      };
 
     return (
         <div className="member" style={{ marginTop: '1cm' }}>
 
             <h2 style={{ backgroundColor: "lightgreen", padding: "10px", borderRadius: "6px", margin: '0.4cm' }}>
-                {editingUserId ? "Edit User" : "Add User"}
+                {editingUserId ? "Edit Soldiers" : "Add Soldiers"}
             </h2>
             {error && <Alert variant="danger">{error}</Alert>}
             {success && <Alert variant="success">{success}</Alert>}
@@ -203,6 +203,23 @@ const UsersPage = () => {
                 <Row>
                     <Col md={6}>
                         <Form.Group>
+                            <Form.Label>Role</Form.Label>
+                            <Form.Select
+                                name="role"
+                                value={formData.role}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Select Role</option>
+                              
+                                <option value="user">Soldier</option>
+                                <option value="Commander-Officer">Commander-Officer</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                        <Form.Group>
                             <Form.Label>Gender</Form.Label>
                             <Form.Select
                                 name="gender"
@@ -218,16 +235,85 @@ const UsersPage = () => {
                     </Col>
                 </Row>
 
+
+                <Row>
+                    <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>Department</Form.Label>
+                            <Form.Select
+                                name="departmentId"
+                                value={formData.departmentId}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Select Department</option>
+                                {departments.map((dept) => (
+                                    <option key={dept.id} value={dept.id}>
+                                        {dept.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>Rank</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="rank"
+                                value={formData.rank}
+                                onChange={handleChange}
+                                placeholder="Rank"
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>Army ID </Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="armyid"
+                                value={formData.armyid}
+                                onChange={handleChange}
+                                placeholder="Army ID"
+                            />
+                        </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>{formData?.joindate ? (
+                            <span>Join Date was: {new Date(formData.joindate).toLocaleDateString()}</span>
+                            ) : (
+                            <p>Join date</p> // You can adjust this to show whatever you need when no date is available
+                            )}
+                            </Form.Label>
+                            <Form.Control
+                                type="date"
+                                name="joindate"
+                                value={formData.joindate}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+
                 <Button type="submit" className="mt-2">
                     {editingUserId ? "Update User" : "Add User"}
                 </Button>
-                <div className="d-flex justify-content-end" style={{ marginBottom: '0.5cm' }}>
-                    <Button onClick={handleClick} style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margin: '0.1cm' }}>Upload File</Button>
-                </div>
+                 <div className="d-flex justify-content-end" style={{ marginBottom: '0.5cm' }}>
+                            <Button    onClick={handleClick} style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margin: '0.1cm' }}>upload file</Button> 
+                           
+                            </div>
             </Form>
 
             <h2 className="text-center mb-4" style={{ backgroundColor: "lightgreen", padding: "10px", borderRadius: "6px", margin: '0.4cm' }}>
-                List of users
+                List of Soldiers
             </h2>
             <Table striped bordered>
                 <thead>
@@ -272,19 +358,14 @@ const UsersPage = () => {
             </Table>
 
             <Pagination>
-                {[...Array(Math.ceil(users.length / usersPerPage))].map((_, index) => (
-                    <Pagination.Item
-                        key={index + 1}
-                        active={index + 1 === currentPage}
-                        onClick={() => setCurrentPage(index + 1)}
-                    >
-                        {index + 1}
+                {[...Array(Math.ceil(users.length / usersPerPage))].map((_, i) => (
+                    <Pagination.Item key={i} onClick={() => setCurrentPage(i + 1)}>
+                        {i + 1}
                     </Pagination.Item>
                 ))}
             </Pagination>
         </div>
     );
 };
-
 
 export default UsersPage;

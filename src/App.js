@@ -17,6 +17,7 @@ import Prof from "./pages/user/user-profile";
 
 // Importing components from the Admin resto pages
 import UsersPage from "./pages/Admin/usersPage";
+import SordierPage from "./pages/Admin/usersPageSordier";
 import Statisticsa from "./pages/Admin/statistics";
 import Setting from "./pages/Admin/user-profile";
 import Batarians from "./pages/Admin/batarians";
@@ -67,6 +68,8 @@ function App() {
 
 
         <Route path="/users" element={<UsersPage />} exact={true} />
+        
+        <Route path="/soldier" element={<SordierPage />} exact={true} />
         <Route path="/skills" element={<Skills />} exact={true} />
         <Route path="/dashboard" element={<Statisticsa />} exact={true} />
         <Route path="/settings" element={<Setting />} exact={true} />
