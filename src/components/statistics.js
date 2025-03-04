@@ -111,7 +111,7 @@ const App = () => {
   return (
     <div>
       {statistics && (
-        <div className="row">
+        <div className="row" style={{marginTop:'2cm'}}>
           {/* User Card */}
           <div
             className="col-xl-4"
@@ -132,25 +132,7 @@ const App = () => {
             </div>
           </div>
 
-          {/* Active Users Card */}
-          <div
-            className="col-xl-4"
-            data-aos="fade-up"
-            data-aos-delay="100"
-            style={{ paddingLeft: '0.7cm', marginTop: '0.5cm' }}
-          >
-             <div className="row member" style={{ padding: '0.2cm',border:'1px solid lightgreen' }}>
-              <div className="col-xl-4 col-md-6" style={{ backgroundColor: 'whitesmoke',border:'1px solid lightgreen', borderRadius: '3px' }}>
-                <h1 style={{ fontSize: '73px',color:'green', fontFamily: 'cursive', textAlign: 'center' }}>
-                  {statistics.activeUsers}
-                </h1>
-              </div>
-              <div className="col-xl-7 col-md-6 statistic-info">
-                <h5>Active Users</h5>
-                <p>Number of active users in our system</p>
-              </div>
-            </div>
-          </div>
+     
 
           {/* Missions Card */}
           <div
@@ -172,25 +154,7 @@ const App = () => {
             </div>
           </div>
 
-          {/* Active Missions Card */}
-          <div
-            className="col-xl-4"
-            data-aos="fade-up"
-            data-aos-delay="100"
-            style={{ paddingLeft: '0.7cm', marginTop: '0.5cm' }}
-          >
-             <div className="row member" style={{ padding: '0.2cm',border:'1px solid lightgreen' }}>
-              <div className="col-xl-4 col-md-6" style={{ backgroundColor: 'whitesmoke',border:'1px solid lightgreen', borderRadius: '3px' }}>
-                <h1 style={{ fontSize: '73px',color:'green', fontFamily: 'cursive', textAlign: 'center' }}>
-                  {statistics.activeMissions}
-                </h1>
-              </div>
-              <div className="col-xl-7 col-md-6 statistic-info">
-                <h5>Active Missions</h5>
-                <p>Number of active missions in the system</p>
-              </div>
-            </div>
-          </div>
+      
 
           {/* Appointments Card */}
           <div
@@ -212,25 +176,6 @@ const App = () => {
             </div>
           </div>
 
-          {/* Active Appointments Card */}
-          <div
-            className="col-xl-4"
-            data-aos="fade-up"
-            data-aos-delay="100"
-            style={{ paddingLeft: '0.7cm', marginTop: '0.5cm' }}
-          >
-             <div className="row member" style={{ padding: '0.2cm',border:'1px solid lightgreen' }}>
-              <div className="col-xl-4 col-md-6" style={{ backgroundColor: 'whitesmoke',border:'1px solid lightgreen', borderRadius: '3px' }}>
-                <h1 style={{ fontSize: '73px',color:'green', fontFamily: 'cursive', textAlign: 'center' }}>
-                  {statistics.activeAppointments}
-                </h1>
-              </div>
-              <div className="col-xl-7 col-md-6 statistic-info">
-                <h5>Active Appointments</h5>
-                <p> active appointments </p>
-              </div>
-            </div>
-          </div>
         </div>
       )}
 
