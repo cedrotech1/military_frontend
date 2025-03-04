@@ -3,10 +3,13 @@ import { Modal, Button, Form, Table } from 'react-bootstrap';
 
 const BatarianManagement = () => {
   const apiUrl = `${process.env.REACT_APP_BASE_URL}/api/v1/batarian`;
-  const authToken =  localStorage.getItem('token');
+  const departmentApiUrl = `${process.env.REACT_APP_BASE_URL}/api/v1/department`; // URL to fetch departments
+  const authToken = localStorage.getItem('token');
 
   const [batarians, setBatarians] = useState([]);
+  const [departments, setDepartments] = useState([]);  // Store department data
   const [newBatarian, setNewBatarian] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState('');  // State for selected department
   const [showModal, setShowModal] = useState(false);
   const [currentBatarian, setCurrentBatarian] = useState(null);
 
@@ -29,10 +32,29 @@ const BatarianManagement = () => {
     }
   };
 
+  // Fetch departments from the API
+  const fetchDepartments = async () => {
+    try {
+      const response = await fetch(departmentApiUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+          'Accept': '*/*',
+        },
+      });
+      const data = await response.json();
+      if (data.length > 0) {
+        setDepartments(data); // Set department data
+      }
+    } catch (error) {
+      console.error('Error fetching departments:', error);
+    }
+  };
+
   // Add a new Batarian
   const addBatarian = async () => {
-    if (!newBatarian.trim()) {
-      alert('Please enter a name for the new Batarian');
+    if (!newBatarian.trim() || !selectedDepartment) {
+      alert('Please enter a name and select a department for the new Batarian');
       return;
     }
 
@@ -43,12 +65,13 @@ const BatarianManagement = () => {
           'Authorization': `Bearer ${authToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: newBatarian }),
+        body: JSON.stringify({ name: newBatarian, departmentId: selectedDepartment }),
       });
 
       const data = await response.json();
       if (data.success) {
         setNewBatarian('');
+        setSelectedDepartment('');  // Clear department selection
         fetchBatarians(); // Refresh the list
       } else {
         alert('Failed to add Batarian');
@@ -84,7 +107,7 @@ const BatarianManagement = () => {
           'Authorization': `Bearer ${authToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: newName }),
+        body: JSON.stringify({ name: newName, departmentId: selectedDepartment }),
       });
 
       const data = await response.json();
@@ -126,11 +149,12 @@ const BatarianManagement = () => {
 
   useEffect(() => {
     fetchBatarians();
+    fetchDepartments();  // Fetch departments when the component mounts
   }, []);
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1 style={{ backgroundColor: "lightgreen", padding: "10px", borderRadius: "6px",margin:'0.4cm' }}>Batarian Management</h1>
+      <h1 style={{ backgroundColor: "lightgreen", padding: "10px", borderRadius: "6px", margin: '0.4cm' }}>Batarian Management</h1>
 
       {/* Add New Batarian Form */}
       <div className="mb-4">
@@ -140,6 +164,20 @@ const BatarianManagement = () => {
           onChange={(e) => setNewBatarian(e.target.value)}
           placeholder="Enter Batarian Name"
         />
+        {/* Department Select Dropdown */}
+        <Form.Control
+          as="select"
+          value={selectedDepartment}
+          onChange={(e) => setSelectedDepartment(e.target.value)}
+          className="mt-2"
+        >
+          <option value="">Select Department</option>
+          {departments.map((department) => (
+            <option key={department.id} value={department.id}>
+              {department.name}
+            </option>
+          ))}
+        </Form.Control>
         <Button variant="primary" className="mt-2" onClick={addBatarian}>
           Add Batarian
         </Button>
@@ -150,7 +188,8 @@ const BatarianManagement = () => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Name</th>
+            <th>Name (batarian)</th>
+            <th>Department</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -159,6 +198,7 @@ const BatarianManagement = () => {
             <tr key={batarian.id}>
               <td>{batarian.id}</td>
               <td>{batarian.name}</td>
+              <td>{batarian.department?.name || 'No Department'}</td> {/* Display department name */}
               <td>
                 <Button variant="info" onClick={() => handleViewClick(batarian)}>
                   View/Edit
@@ -187,6 +227,22 @@ const BatarianManagement = () => {
                   defaultValue={currentBatarian.name}
                   onChange={(e) => setCurrentBatarian({ ...currentBatarian, name: e.target.value })}
                 />
+              </Form.Group>
+              {/* Department Select for Editing */}
+              <Form.Group controlId="formDepartmentSelect">
+                <Form.Label>Department</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={selectedDepartment}
+                  onChange={(e) => setSelectedDepartment(e.target.value)}
+                >
+                  <option value="">Select Department</option>
+                  {departments.map((department) => (
+                    <option key={department.id} value={department.id}>
+                      {department.name}
+                    </option>
+                  ))}
+                </Form.Control>
               </Form.Group>
             </Form>
           </Modal.Body>

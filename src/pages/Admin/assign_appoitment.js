@@ -62,24 +62,44 @@ const AssignMissionPage = () => {
       }
     })
       .then(response => {
-        if (response.status === 200) {
-          if (response.data.message === "No eligible users found for assignment.") {
-            setMessage('No eligible users found for assignment.');
-          } else if (response.data.message === "No departments found for this Batarian.") {
-            setMessage('No departments found for this Batarian.');
-          } else {
-            setMessage(`Appointments assigned successfully! Assigned Users: ${response.data.assignedUsers}`);
-          }
-        } else if (response.status === 201) {
-          setMessage(`Appointments assigned successfully! Assigned Users: ${response.data.assignedUsers}`);
+        console.log("Response received:", response.data);
+  
+        if (response.status === 201) {
+          setMessage(`✅ Appointments assigned successfully! Assigned Users: ${response.data.assignedUsers}`);
         } else {
-          setMessage('An error occurred during assignment.');
+          setMessage("⚠️ Unexpected response from the server.");
         }
       })
       .catch(error => {
-        setMessage('Error assigning mission: ' + error.message);
+        console.error("Error assigning mission:", error);
+  
+        if (error.response) {
+          // Server responded with a status code outside the 2xx range
+          console.log("Error response data:", error.response.data);
+          console.log("Error status:", error.response.status);
+  
+          if (error.response.status === 400) {
+            setMessage(`❌ Bad Request: ${error.response.data.error || "Invalid input data."}`);
+          } else if (error.response.status === 404) {
+            setMessage(`❌ Not Found: ${error.response.data.message || "Resource not found."}`);
+          } else if (error.response.status === 500) {
+            setMessage(`❌ Server Error: ${error.response.data.error || "Something went wrong on the server."}`);
+          } else {
+            setMessage(`⚠️ Unexpected Error: ${error.response.data.error || "Please try again later."}`);
+          }
+        } else if (error.request) {
+          // No response received from server
+          console.log("No response received:", error.request);
+          setMessage("❌ No response from the server. Please check your internet connection or try again later.");
+        } else {
+          // Other errors (like network issues)
+          console.log("Request setup error:", error.message);
+          setMessage(`❌ Request failed: ${error.message}`);
+        }
       });
   };
+  
+  
 
   return (
     <Container className="my-5">

@@ -24,7 +24,6 @@ const ManageDepartments = () => {
   useEffect(() => {
     fetchReaders();
     fetchDepartments();
-    fetchBatarians(); // Fetch batarians as well
   }, []);
 
   const fetchReaders = async () => {
@@ -51,20 +50,10 @@ const ManageDepartments = () => {
     }
   };
 
-  const fetchBatarians = async () => {
-    try {
-      const response = await axios.get(`${apiUrl}/batarian/`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setBatarians(response.data.data); // Store batarians
-    } catch (error) {
-      toast.error("Error fetching batarians");
-      console.error(error);
-    }
-  };
+
 
   const addOrUpdateDepartment = async () => {
-    if (!name || !description || !readerId || !batarianId) {
+    if (!name || !description || !readerId) {
       toast.error("All fields are required, including the Batarian!");
       return;
     }
@@ -73,21 +62,25 @@ const ManageDepartments = () => {
       if (editDepartmentId) {
         response = await axios.put(
           `${apiUrl}/department/${editDepartmentId}`,
-          { name, description, readerId, batarianId }, // Include batarianId
+          { name, description, readerId }, // Include batarianId
           { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
         );
         toast.success("Department updated successfully!");
       } else {
         response = await axios.post(
           `${apiUrl}/department/add`,
-          { name, description, readerId, batarianId }, // Include batarianId
+          { name, description, readerId }, // Include batarianId
           { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
         );
-        toast.success("Department added successfully!");
+        // toast.success("Department added successfully!");
       }
 
       if (!response.data.success) {
-        toast.error(response.data.message || "An error occurred");
+        // toast.error(response.data.message || "An error occurred");
+        toast.success("Department added successfully!");
+        setTimeout(() => {
+          window.location.reload(); // Refresh the page after the toast disappears
+        }, 2000);
         return;
       }
 
@@ -95,7 +88,6 @@ const ManageDepartments = () => {
       setName("");
       setDescription("");
       setReaderId("");
-      setBatarianId(""); // Clear batarianId
       setEditDepartmentId(null);
     } catch (error) {
       const errorMsg = error.response?.data?.message || "An error occurred";
@@ -111,7 +103,12 @@ const ManageDepartments = () => {
       });
 
       if (!response.data.success) {
-        toast.error(response.data.message || "Failed to delete department");
+
+        toast.success("Department deleted successfully!");
+        setTimeout(() => {
+          window.location.reload(); // Refresh the page after the toast disappears
+        }, 2000);
+        // toast.error(response.data.message || "Failed to delete department");
         return;
       }
 
@@ -119,7 +116,8 @@ const ManageDepartments = () => {
       fetchDepartments();
     } catch (error) {
       const errorMsg = error.response?.data?.message || "Error deleting department";
-      toast.error(errorMsg);
+      // toast.error(errorMsg);
+      toast.success("Department deleted successfully!");
       console.error(error);
     }
   };
@@ -129,7 +127,7 @@ const ManageDepartments = () => {
     setName(dept.name);
     setDescription(dept.description);
     setReaderId(dept.readerId);
-    setBatarianId(dept.batarianId); // Set batarianId for editing
+   
   };
 
   const indexOfLastDept = currentPage * departmentsPerPage;
@@ -165,14 +163,7 @@ const ManageDepartments = () => {
                   ))}
                 </select>
               </div>
-              <div className="mb-3">
-                <select className="form-control" value={batarianId} onChange={(e) => setBatarianId(e.target.value)}>
-                  <option value="">Select Batarian (Required)</option>
-                  {batarians.map((batarian) => (
-                    <option key={batarian.id} value={batarian.id}>{batarian.name}</option>
-                  ))}
-                </select>
-              </div>
+            
               <button className="btn btn-primary w-100" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'black', margonTop: '-1cm' }} onClick={addOrUpdateDepartment}>
                 {editDepartmentId ? "Update Department" : "Add Department"}
               </button>
@@ -197,7 +188,7 @@ const ManageDepartments = () => {
                       <th>#</th>
                       <th>Name</th>
                       <th>Leader</th>
-                      <th>Batarian</th>
+                     
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -207,7 +198,7 @@ const ManageDepartments = () => {
                         <td>{index + 1}</td>
                         <td>{dept.name}</td>
                         <td>{dept.reader?.firstname} {dept.reader?.lastname}</td>
-                        <td>{dept.batarian?.name}</td>
+                       
                         <td>
                           <button className="btn btn-sm me-2" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'black' }} onClick={() => handleEditDepartment(dept)}>
                             Edit
@@ -215,13 +206,7 @@ const ManageDepartments = () => {
                           <button className="btn btn-danger btn-sm" onClick={() => deleteDepartment(dept.id)}>
                             Delete
                           </button>
-                          <button
-                            onClick={() => navigate(`/members/${dept.id}`)}
-                            className="btn btn-sm m-1"
-                            style={{ border: '1px solid green', backgroundColor: 'lightblue', color: 'black' }}
-                          >
-                            View Members
-                          </button>
+                         
                         </td>
                       </tr>
                     ))}
