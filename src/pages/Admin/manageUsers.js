@@ -29,6 +29,25 @@ const UsersPage = () => {
     const usersPerPage = 5;
     const navigate = useNavigate();
 
+    const militaryRanks = [
+        "Private",
+        "Corporal",
+        "Sergeant",
+        "Staff Sergeant",
+        "Warrant Officer",
+        "Second Lieutenant",
+        "First Lieutenant",
+        "Captain",
+        "Major",
+        "Lieutenant Colonel",
+        "Colonel",
+        "Brigadier General",
+        "Major General",
+        "Lieutenant General",
+        "General",
+        "Field Marshal"
+    ];
+
     const token = localStorage.getItem("token");
 
     useEffect(() => {
@@ -296,13 +315,15 @@ const UsersPage = () => {
                     <Col md={6}>
                         <Form.Group>
                             <Form.Label>Rank</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="rank"
-                                value={formData.rank}
-                                onChange={handleChange}
-                                placeholder="Rank"
-                            />
+                            <Form.Label>Rank</Form.Label>
+                            <Form.Select name="rank" value={formData.rank} onChange={handleChange}>
+                            <option value="">Select Rank</option>
+                            {militaryRanks.map((rank, index) => (
+                                <option key={index} value={rank}>
+                                {rank}
+                                </option>
+                            ))}
+                            </Form.Select>
                         </Form.Group>
                     </Col>
                 </Row>

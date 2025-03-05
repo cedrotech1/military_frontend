@@ -151,9 +151,19 @@ useEffect(() => {
                   <span className="badge bg-info">{user.role}</span>
                 </td>
                 <td>
-                  <span className={`badge ${user.hasappoitment === "yes" ? "bg-success" : "bg-danger"}`}>
-                    {user.hasappoitment}
-                  </span>
+                {user.hasappoitment === null ? (
+                  <span className="badge bg-secondary">Unknown</span>
+                ) : user.hasappoitment === "yes" ? (
+                  <span className="badge bg-success">Yes</span>
+                ) : (
+                  <span className="badge bg-danger">{user.hasappoitment === null ? (
+                    <span className="badge bg-danger">No</span>
+                  ) : user.hasappoitment === "yes" ? (
+                    <span className="badge bg-success">Yes</span>
+                  ) : (
+                    <span className="badge bg-danger">No</span>
+                  )}</span>
+                )}
                 </td>
               </tr>
             ))
