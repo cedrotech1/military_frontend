@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Table, Form, Button, Alert, Pagination, Col, Row } from "react-bootstrap";
 import { useNavigate, useParams } from 'react-router-dom';
-
+import { toast } from "react-toastify";
+import { ToastContainer } from 'react-toastify';
 const UsersPage = () => {
     const [users, setUsers] = useState([]);
     const [departments, setDepartments] = useState([]);
@@ -11,15 +12,20 @@ const UsersPage = () => {
         lastname: "",
         email: "",
         phone: "",
-        role: "admin",
+        role: "user",
         gender: "",
         address: "",
-        armyid: Math.random().toString(36).substring(2, 8),  // Generate a string armyid
+        departmentId: "",
+        rank: "",
+        armyid: "",
+        joindate: "",
+        batarianId: "",
     });
     const [editingUserId, setEditingUserId] = useState(null);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
+    const [batarians, setBatarians] = useState([]);
     const usersPerPage = 5;
     const navigate = useNavigate();
 
@@ -33,7 +39,7 @@ const UsersPage = () => {
             .then((res) => {
                 // Filter users based on role
                 const filteredUsers = res.data.users.filter(
-                    (user) => user.role === "admin" 
+                    (user) => user.role === "admin"
                 );
                 setUsers(filteredUsers);
             })
@@ -47,17 +53,37 @@ const UsersPage = () => {
             .catch((err) => setError("Error fetching departments: " + err.response?.data?.message || err.message));
     }, []);
 
+    useEffect(() => {
+        fetchBatarians();
+      }, []);
+    
+      const fetchBatarians = async () => {
+        try {
+          const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/batarian/`, {
+            method: "GET",
+            headers: {
+              "Accept": "*/*",
+              "Authorization": `Bearer ${token}`
+            },
+          });
+          const data = await response.json();
+          if (data.success) {
+            setBatarians(data.data);
+          } else {
+            console.error("Failed to fetch batarians:", data.message);
+          }
+        } catch (error) {
+          console.error("Error fetching batarians:", error);
+        }
+      };
+    
+    
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const generateArmyId = () => {
-        const randomId = Math.random().toString(36).substring(2, 8);  // Generate string armyid
-        setFormData(prevState => ({
-            ...prevState,
-            armyid: randomId
-        }));
-    };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -65,10 +91,10 @@ const UsersPage = () => {
         setSuccess("");
 
         // Check if all required fields are filled
-        if (!formData.firstname || !formData.lastname || !formData.email || !formData.gender || !formData.role) {
-            setError("Please fill in all required fields!");
-            return;
-        }
+        // if (!formData.firstname || !formData.lastname || !formData.email || !formData.gender || !formData.departmentId || !formData.role) {
+        //     setError("Please fill in all required fields!");
+        //     return;
+        // }
 
         const url = editingUserId
             ? `${process.env.REACT_APP_BASE_URL}/api/v1/users/update/${editingUserId}`
@@ -88,20 +114,26 @@ const UsersPage = () => {
                         ? prevUsers.map((user) => (user.id === editingUserId ? res.data.user : user))
                         : [...prevUsers, res.data.user]
                 );
-                setSuccess("User saved successfully!");
+               
+                      toast.success('User saved successfully!');
+                
                 setFormData({
                     firstname: "",
                     lastname: "",
                     email: "",
                     phone: "",
-                    role: "admin",
+                    role: "",
                     gender: "",
                     address: "",
-                    armyid: Math.random().toString(36).substring(2, 8),  // Generate new string armyid
+                    departmentId: "",
+                    rank: "",
+                    armyid: "",
+                    joindate: "",
+                    status: "",
                 });
                 setEditingUserId(null);
             })
-            .catch((err) => setError("Error saving user: " + err.response?.data?.message || err.message));
+            .catch((err) =>  toast.error(err.response?.data?.message || err.message)); 
     };
 
     const handleEdit = (user) => {
@@ -118,8 +150,9 @@ const UsersPage = () => {
                 .then(() => {
                     setUsers(users.filter((user) => user.id !== userId));
                     setSuccess("User deleted successfully!");
+                    toast.success("User deleted successfully!");
                 })
-                .catch((err) => setError("Error deleting user: " + err.response?.data?.message || err.message));
+                .catch((err) =>  toast.error(err.response?.data?.message || err.message));
         }
     };
 
@@ -130,8 +163,9 @@ const UsersPage = () => {
     const handleViewProfile = (id) => { navigate(`../other_user-profile/${id}`); }
 
     const handleClick = () => {
+        
         navigate('/upload');
-    };
+      };
 
     return (
         <div className="member" style={{ marginTop: '1cm' }}>
@@ -203,6 +237,23 @@ const UsersPage = () => {
                 <Row>
                     <Col md={6}>
                         <Form.Group>
+                            <Form.Label>Role</Form.Label>
+                            <Form.Select
+                                name="role"
+                                value={formData.role}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Select Role</option>
+                              
+                                <option value="admin">User(admin)</option>
+                              
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                        <Form.Group>
                             <Form.Label>Gender</Form.Label>
                             <Form.Select
                                 name="gender"
@@ -218,24 +269,124 @@ const UsersPage = () => {
                     </Col>
                 </Row>
 
+
+                <Row>
+                    <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>Department</Form.Label>
+                            <Form.Select
+                                name="departmentId"
+                                value={formData.departmentId}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Select Department</option>
+                                {departments.map((dept) => (
+                                    <option key={dept.id} value={dept.id}>
+                                        {dept.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>Rank</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="rank"
+                                value={formData.rank}
+                                onChange={handleChange}
+                                placeholder="Rank"
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>Army ID </Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="armyid"
+                                value={formData.armyid}
+                                onChange={handleChange}
+                                placeholder="Army ID"
+                            />
+                        </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>{formData?.joindate ? (
+                            <span>Join Date was: {new Date(formData.joindate).toLocaleDateString()}</span>
+                            ) : (
+                            <p>Join date</p> // You can adjust this to show whatever you need when no date is available
+                            )}
+                            </Form.Label>
+                            <Form.Control
+                                type="date"
+                                name="joindate"
+                                value={formData.joindate}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                    <Form.Group>
+                        <Form.Label>Status</Form.Label>
+                        <Form.Select name="status" value={formData.status} onChange={handleChange} required>
+                            <option value="">Select Status</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                            <option value="On Leave">On Leave</option>
+                            <option value="On sick">sick</option>
+                        </Form.Select>
+                    </Form.Group>
+                   
+                </Col>
+                <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>Batarian</Form.Label>
+                            <Form.Select
+                                name="batarianId"
+                                value={formData.batarianId}
+                                onChange={handleChange}
+                                required
+                            >
+                               {batarians.map((batarian) => (
+                                    <option key={batarian.id} value={batarian.id}>
+                                    {batarian.name} - {batarian.department.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
+                </Row>
+
                 <Button type="submit" className="mt-2">
                     {editingUserId ? "Update User" : "Add User"}
                 </Button>
-                <div className="d-flex justify-content-end" style={{ marginBottom: '0.5cm' }}>
-                    <Button onClick={handleClick} style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margin: '0.1cm' }}>Upload File</Button>
-                </div>
+                 <div className="d-flex justify-content-end" style={{ marginBottom: '0.5cm' }}>
+                            <Button    onClick={handleClick} style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margin: '0.1cm' }}>upload file</Button> 
+                           
+                            </div>
             </Form>
 
             <h2 className="text-center mb-4" style={{ backgroundColor: "lightgreen", padding: "10px", borderRadius: "6px", margin: '0.4cm' }}>
-                List of users
+                List of User(admins)
             </h2>
-            <Table striped bordered>
+            <Table striped>
                 <thead>
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        {/* <th>Role</th> */}
+                        <th>Role</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -245,7 +396,8 @@ const UsersPage = () => {
                             <td>{user.firstname} {user.lastname}</td>
                             <td>{user.email}</td>
                             <td>{user.phone}</td>
-                            {/* <td>{user.role}</td> */}
+                            <td>{user.role ='user'? 'soldier':'Officer'}</td>
+                            <td>{user.status}</td>
                             <td>
                                 <Button
                                     style={{ border: "1px solid orange", backgroundColor: "white", color: "orange", margin: '2px' }}
@@ -272,19 +424,15 @@ const UsersPage = () => {
             </Table>
 
             <Pagination>
-                {[...Array(Math.ceil(users.length / usersPerPage))].map((_, index) => (
-                    <Pagination.Item
-                        key={index + 1}
-                        active={index + 1 === currentPage}
-                        onClick={() => setCurrentPage(index + 1)}
-                    >
-                        {index + 1}
+                {[...Array(Math.ceil(users.length / usersPerPage))].map((_, i) => (
+                    <Pagination.Item key={i} onClick={() => setCurrentPage(i + 1)}>
+                        {i + 1}
                     </Pagination.Item>
                 ))}
             </Pagination>
+                   <ToastContainer />
         </div>
     );
 };
-
 
 export default UsersPage;

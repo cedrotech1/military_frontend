@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Table } from 'react-bootstrap';
-
+import { Link } from "react-router-dom";
 const BatarianManagement = () => {
   const apiUrl = `${process.env.REACT_APP_BASE_URL}/api/v1/batarian`;
   const departmentApiUrl = `${process.env.REACT_APP_BASE_URL}/api/v1/department`; // URL to fetch departments
@@ -206,6 +206,10 @@ const BatarianManagement = () => {
                 <Button variant="danger" onClick={() => deleteBatarian(batarian.id)}>
                   Delete
                 </Button>
+
+                <Link to={`/users/${batarian.id}`}>
+            <Button variant="info">View Users</Button>
+          </Link>
               </td>
             </tr>
           ))}

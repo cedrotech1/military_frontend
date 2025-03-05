@@ -43,7 +43,7 @@ import Upload from "./pages/Admin/uploadpage";
 import Skills from "./pages/Admin/skillsPage";
 
 import Assign_appoitment from "./pages/Admin/AssignAppoitment_to_batarian_page";
-
+import UsersTable from "./pages/Admin/BatarianMembersPage"; 
 
 
 // Main App component
@@ -88,7 +88,7 @@ function App() {
         <Route path="/upload" element={<Upload/>} exact={true} />
 
         <Route path="/assign_appoitment" element={<Assign_appoitment/>} exact={true} />
-
+        <Route path="/users/:batarianId" element={<UsersTable/>} />
         
   
         

@@ -68,6 +68,10 @@ const LandingPage = () => {
     { name: 'Manage Departments', icon: <BiBuilding />, to: '/department' }, 
     { name: 'Manage Batarians', icon: <BiBuilding />, to: '/batarians' }, 
     { name: 'Settings', icon: <BiCog />, to: '/settings' },
+
+    { name: 'Missions', icon: <BiTargetLock />, to: '/missions' },
+    { name: 'Country Missions', icon: <BiWorld />, to: '/country' }, 
+    { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
   ];
 
   const officerMenu = [
@@ -91,7 +95,7 @@ const LandingPage = () => {
   };
 
   return (
-    <div style={{ border: '0px solid green', backgroundColor: 'white', color: 'green', marginTop: '1cm' }} 
+    <div style={{ border: '0px solid green', backgroundColor: 'white', color: 'green', marginTop: '-2cm' }} 
          className="col-md-2 d-none d-md-block sidebar border-end position-fixed vh-100">
       
       <div className="text-center">
