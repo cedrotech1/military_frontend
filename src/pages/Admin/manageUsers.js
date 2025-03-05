@@ -115,7 +115,10 @@ const UsersPage = () => {
                         : [...prevUsers, res.data.user]
                 );
                
-                      toast.success('User saved successfully!');
+                toast.success('User saved successfully!');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 2000);
                 
                 setFormData({
                     firstname: "",

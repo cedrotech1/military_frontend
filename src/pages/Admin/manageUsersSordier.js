@@ -115,7 +115,10 @@ const UsersPage = () => {
                         : [...prevUsers, res.data.user]
                 );
                
-                      toast.success('User saved successfully!');
+                toast.success('User saved successfully!');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 2000);
                 
                 setFormData({
                     firstname: "",
@@ -368,7 +371,7 @@ const UsersPage = () => {
                 </Row>
 
                 <Button type="submit" className="mt-2">
-                    {editingUserId ? "Update User" : "Add User"}
+                    {editingUserId ? "Update Soldier" : "Add Soldier"}
                 </Button>
                  <div className="d-flex justify-content-end" style={{ marginBottom: '0.5cm' }}>
                             <Button    onClick={handleClick} style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margin: '0.1cm' }}>upload file</Button> 

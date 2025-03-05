@@ -234,6 +234,7 @@ const MissionsPage = () => {
             <div className="card-body">
               <h4 className="card-title">Add Mission</h4>
               <form onSubmit={handleAddMission}>
+              <label>Name</label>
                 <input
                   type="text"
                   className="form-control mb-3"
@@ -243,6 +244,7 @@ const MissionsPage = () => {
                   onChange={handleChange}
                   required
                 />
+                 <label>Description</label>
                 <textarea
                   className="form-control mb-3"
                   placeholder="Mission Description"
@@ -251,6 +253,7 @@ const MissionsPage = () => {
                   onChange={handleChange}
                   required
                 />
+                 <label>Location specification</label>
                 <input
                   type="text"
                   className="form-control mb-3"
@@ -260,6 +263,7 @@ const MissionsPage = () => {
                   onChange={handleChange}
                   required
                 />
+                <label>Start date</label>
                 <input
                   type="date"
                   className="form-control mb-3"
@@ -268,6 +272,7 @@ const MissionsPage = () => {
                   onChange={handleChange}
                   required
                 />
+                   <label>end date</label>
                 <input
                   type="date"
                   className="form-control mb-3"

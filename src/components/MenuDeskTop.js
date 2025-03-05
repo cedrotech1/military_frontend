@@ -95,7 +95,7 @@ const LandingPage = () => {
   };
 
   return (
-    <div style={{ border: '0px solid green', backgroundColor: 'white', color: 'green', marginTop: '-2cm' }} 
+    <div style={{ border: '0px solid green', backgroundColor: 'white', color: 'green', marginTop: '-2cm',marginLeft:'-0.5cm' }} 
          className="col-md-2 d-none d-md-block sidebar border-end position-fixed vh-100">
       
       <div className="text-center">
