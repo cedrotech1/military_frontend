@@ -148,23 +148,23 @@ useEffect(() => {
                 <td>{user.email}</td>
                 <td>{user.phone}</td>
                 <td>
-                  <span className="badge bg-info">{user.role}</span>
+                <td>
+  {user.role === 'user' ? (
+    <span className="badge bg-info">Soldier</span>
+  ) : (
+    <span className="badge bg-info">{user.role}</span>
+  )}
+</td>
+
                 </td>
                 <td>
-                {user.hasappoitment === null ? (
-                  <span className="badge bg-secondary">Unknown</span>
-                ) : user.hasappoitment === "yes" ? (
-                  <span className="badge bg-success">Yes</span>
-                ) : (
-                  <span className="badge bg-danger">{user.hasappoitment === null ? (
-                    <span className="badge bg-danger">No</span>
-                  ) : user.hasappoitment === "yes" ? (
-                    <span className="badge bg-success">Yes</span>
-                  ) : (
-                    <span className="badge bg-danger">No</span>
-                  )}</span>
-                )}
-                </td>
+  {user.appointments && user.appointments.length === 0 ? (
+    <span className="badge bg-danger">No</span>
+  ) : (
+    <span className="badge bg-success">yes</span>
+  )}
+</td>
+
               </tr>
             ))
           ) : (

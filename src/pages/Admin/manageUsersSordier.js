@@ -45,7 +45,7 @@ const UsersPage = () => {
         "Lieutenant General",
         "General",
         "Field Marshal"
-      ];
+    ];
 
     const token = localStorage.getItem("token");
 
@@ -62,7 +62,7 @@ const UsersPage = () => {
                 setUsers(filteredUsers);
             })
             .catch((err) => setError("Error fetching users: " + err.response?.data?.message || err.message));
-    
+
         axios
             .get(`${process.env.REACT_APP_BASE_URL}/api/v1/department/`, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -73,29 +73,29 @@ const UsersPage = () => {
 
     useEffect(() => {
         fetchBatarians();
-      }, []);
-    
-      const fetchBatarians = async () => {
+    }, []);
+
+    const fetchBatarians = async () => {
         try {
-          const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/batarian/`, {
-            method: "GET",
-            headers: {
-              "Accept": "*/*",
-              "Authorization": `Bearer ${token}`
-            },
-          });
-          const data = await response.json();
-          if (data.success) {
-            setBatarians(data.data);
-          } else {
-            console.error("Failed to fetch batarians:", data.message);
-          }
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/v1/batarian/`, {
+                method: "GET",
+                headers: {
+                    "Accept": "*/*",
+                    "Authorization": `Bearer ${token}`
+                },
+            });
+            const data = await response.json();
+            if (data.success) {
+                setBatarians(data.data);
+            } else {
+                console.error("Failed to fetch batarians:", data.message);
+            }
         } catch (error) {
-          console.error("Error fetching batarians:", error);
+            console.error("Error fetching batarians:", error);
         }
-      };
-    
-    
+    };
+
+
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -132,12 +132,12 @@ const UsersPage = () => {
                         ? prevUsers.map((user) => (user.id === editingUserId ? res.data.user : user))
                         : [...prevUsers, res.data.user]
                 );
-               
+
                 toast.success('User saved successfully!');
                 setTimeout(() => {
-                  window.location.reload();
+                    window.location.reload();
                 }, 2000);
-                
+
                 setFormData({
                     firstname: "",
                     lastname: "",
@@ -154,7 +154,7 @@ const UsersPage = () => {
                 });
                 setEditingUserId(null);
             })
-            .catch((err) =>  toast.error(err.response?.data?.message || err.message)); 
+            .catch((err) => toast.error(err.response?.data?.message || err.message));
     };
 
     const handleEdit = (user) => {
@@ -173,7 +173,7 @@ const UsersPage = () => {
                     setSuccess("User deleted successfully!");
                     toast.success("User deleted successfully!");
                 })
-                .catch((err) =>  toast.error(err.response?.data?.message || err.message));
+                .catch((err) => toast.error(err.response?.data?.message || err.message));
         }
     };
 
@@ -184,9 +184,9 @@ const UsersPage = () => {
     const handleViewProfile = (id) => { navigate(`../other_user-profile/${id}`); }
 
     const handleClick = () => {
-        
+
         navigate('/upload');
-      };
+    };
 
     return (
         <div className="member" style={{ marginTop: '1cm' }}>
@@ -266,7 +266,7 @@ const UsersPage = () => {
                                 required
                             >
                                 <option value="">Select Role</option>
-                              
+
                                 <option value="user">Soldier</option>
                                 <option value="Commander-Officer">Commander-Officer</option>
                             </Form.Select>
@@ -315,13 +315,13 @@ const UsersPage = () => {
                         <Form.Group>
                             <Form.Label>Rank</Form.Label>
                             <Form.Select name="rank" value={formData.rank} onChange={handleChange}>
-      <option value="">Select Rank</option>
-      {militaryRanks.map((rank, index) => (
-        <option key={index} value={rank}>
-          {rank}
-        </option>
-      ))}
-    </Form.Select>
+                                <option value="">Select Rank</option>
+                                {militaryRanks.map((rank, index) => (
+                                    <option key={index} value={rank}>
+                                        {rank}
+                                    </option>
+                                ))}
+                            </Form.Select>
                         </Form.Group>
                     </Col>
                 </Row>
@@ -343,9 +343,9 @@ const UsersPage = () => {
                     <Col md={6}>
                         <Form.Group>
                             <Form.Label>{formData?.joindate ? (
-                            <span>Join Date was: {new Date(formData.joindate).toLocaleDateString()}</span>
+                                <span>Join Date was: {new Date(formData.joindate).toLocaleDateString()}</span>
                             ) : (
-                            <p>Join date</p> // You can adjust this to show whatever you need when no date is available
+                                <p>Join date</p> // You can adjust this to show whatever you need when no date is available
                             )}
                             </Form.Label>
                             <Form.Control
@@ -358,19 +358,19 @@ const UsersPage = () => {
                         </Form.Group>
                     </Col>
                     <Col md={6}>
-                    <Form.Group>
-                        <Form.Label>Status</Form.Label>
-                        <Form.Select name="status" value={formData.status} onChange={handleChange} required>
-                            <option value="">Select Status</option>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                            <option value="On Leave">On Leave</option>
-                            <option value="On sick">sick</option>
-                        </Form.Select>
-                    </Form.Group>
-                   
-                </Col>
-                <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>Status</Form.Label>
+                            <Form.Select name="status" value={formData.status} onChange={handleChange} required>
+                                <option value="">Select Status</option>
+                                <option value="active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="On Leave">On Leave</option>
+                                <option value="On sick">sick</option>
+                            </Form.Select>
+                        </Form.Group>
+
+                    </Col>
+                    <Col md={6}>
                         <Form.Group>
                             <Form.Label>Batarian</Form.Label>
                             <Form.Select
@@ -379,9 +379,9 @@ const UsersPage = () => {
                                 onChange={handleChange}
                                 required
                             >
-                               {batarians.map((batarian) => (
+                                {batarians.map((batarian) => (
                                     <option key={batarian.id} value={batarian.id}>
-                                    {batarian.name} - {batarian.department.name}
+                                        {batarian.name} - {batarian.department.name}
                                     </option>
                                 ))}
                             </Form.Select>
@@ -392,10 +392,10 @@ const UsersPage = () => {
                 <Button type="submit" className="mt-2">
                     {editingUserId ? "Update Soldier" : "Add Soldier"}
                 </Button>
-                 <div className="d-flex justify-content-end" style={{ marginBottom: '0.5cm' }}>
-                            <Button    onClick={handleClick} style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margin: '0.1cm' }}>upload file</Button> 
-                           
-                            </div>
+                <div className="d-flex justify-content-end" style={{ marginBottom: '0.5cm' }}>
+                    <Button onClick={handleClick} style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margin: '0.1cm' }}>upload file</Button>
+
+                </div>
             </Form>
 
             <h2 className="text-center mb-4" style={{ backgroundColor: "lightgreen", padding: "10px", borderRadius: "6px", margin: '0.4cm' }}>
@@ -418,7 +418,7 @@ const UsersPage = () => {
                             <td>{user.firstname} {user.lastname}</td>
                             <td>{user.email}</td>
                             <td>{user.phone}</td>
-                            <td>{user.role ='user'? 'soldier':'Officer'}</td>
+                            <td>{user.role = 'user' ? 'soldier' : 'Officer'}</td>
                             <td>{user.status}</td>
                             <td>
                                 <Button
@@ -452,7 +452,7 @@ const UsersPage = () => {
                     </Pagination.Item>
                 ))}
             </Pagination>
-                   <ToastContainer />
+            <ToastContainer />
         </div>
     );
 };
