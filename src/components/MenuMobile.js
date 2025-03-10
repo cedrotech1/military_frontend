@@ -77,23 +77,29 @@ const LandingPage = () => {
 
   const unreadNotifications = notifications.filter((n) => !n.read).length;
 
-      const adminMenu = [
-        { name: 'Overview', icon: <BsHouseDoor />, to: '/dashboard' },
-        { name: 'Manage Users', icon: <BsHouseDoor />, to: '/users' },
-        { name: 'Manage Skills', icon: <BiWorld />, to: '/skills' }, 
-        { name: 'Manage Departments', icon: <BiBuilding />, to: '/department' }, 
-        { name: 'Manage Batarians', icon: <BiBuilding />, to: '/batarians' }, 
-        { name: 'Settings', icon: <BiCog />, to: '/settings' },
-      ];
-    
-      const officerMenu = [
-        { name: 'Dashboard', icon: <BsHouseDoor />, to: '/dashboard' },
-        { name: 'Missions', icon: <BiTargetLock />, to: '/missions' },
-        { name: 'Country Missions', icon: <BiWorld />, to: '/country' }, 
-        { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
-        { name: 'Settings', icon: <BiCog />, to: '/settings' },
-        { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }
-      ];
+  const adminMenu = [
+    { name: 'Overview', icon: <BsHouseDoor />, to: '/dashboard' },
+    { name: 'Manage Users', icon: <BiUser />, to: '/users' },
+    { name: 'Manage Soldier', icon: <BiCategory />, to: '/soldier' },
+    { name: 'Manage Skills', icon: <BiTargetLock />, to: '/skills' },
+    { name: 'Manage Departments', icon: <BiBuilding />, to: '/department' },
+    { name: 'Manage Batarians', icon: <BiBuilding />, to: '/batarians' },
+    { name: 'Settings', icon: <BiCog />, to: '/settings' },
+    { name: 'Missions', icon: <BiTargetLock />, to: '/missions' },
+    { name: 'Country Missions', icon: <BiWorld />, to: '/country' },
+    { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
+    { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }
+  ];
+  
+  const officerMenu = [
+    { name: 'Dashboard', icon: <BsHouseDoor />, to: '/dashboard' },
+    { name: 'Missions', icon: <BiTargetLock />, to: '/missions' },
+    { name: 'Country Missions', icon: <BiWorld />, to: '/country' },
+    { name: 'Appointment', icon: <BiCalendarCheck />, to: '/appointment' },
+    { name: 'Settings', icon: <BiCog />, to: '/settings' },
+    { name: 'Report', icon: <BsFileBarGraph />, to: '/reports' }
+  ];
+  
 
   const getMenu = () => {
     switch (obj.role) {

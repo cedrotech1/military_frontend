@@ -215,9 +215,11 @@ const AppointmentsPage = () => {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>User</th>
+                        <th>Sordier Names</th>
+                        <th>emails</th>
+                        <th>phone</th>
                         <th>Mission</th>
-                        <th>Status</th>
+                        {/* <th>Status</th> */}
                         {/* <th>Assigned By</th> */}
                         {/* <th>Date</th> */}
                         <th>Actions</th>
@@ -229,8 +231,10 @@ const AppointmentsPage = () => {
                             <tr key={appointment.id}>
                                 <td>{index + 1}</td>
                                 <td>{appointment.user?.firstname} {appointment.user?.lastname}</td>
+                                <td>{appointment.user?.email} </td>
+                                <td>{appointment.user?.phone} </td>
                                 <td>{appointment.mission?.name}</td>
-                                <td>{appointment.status}</td>
+                                {/* <td>{appointment.status}</td> */}
                                 {/* <td>{appointment.assigner?.firstname} {appointment.assigner?.lastname}</td> */}
                                 {/* <td>{new Date(appointment.createdAt).toLocaleDateString()}</td> */}
                                 <td><Button style={{ border: '1px solid green', backgroundColor: 'white', color: 'green', margonTop: '-1cm' }} onClick={() => { setSelectedAppointment(appointment); setShowModal(true); }}>View</Button></td>

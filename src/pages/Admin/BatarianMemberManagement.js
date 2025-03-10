@@ -64,6 +64,7 @@ useEffect(() => {
         user.firstname.toLowerCase().includes(search.toLowerCase()) ||
         user.lastname.toLowerCase().includes(search.toLowerCase()) ||
         user.email.toLowerCase().includes(search.toLowerCase()) ||
+        user.hasappoitment.toLowerCase().includes(search.toLowerCase()) ||
         user.role.toLowerCase().includes(search.toLowerCase())
     );
     setFilteredUsers(results);
@@ -135,6 +136,8 @@ useEffect(() => {
               Role <FaSort />
             </th>
             <th>Has appoitment</th>
+            {/* <th>Reson</th> */}
+
           </tr>
         </thead>
         <tbody>
@@ -147,6 +150,7 @@ useEffect(() => {
                 </td>
                 <td>{user.email}</td>
                 <td>{user.phone}</td>
+
                 <td>
                 <td>
   {user.role === 'user' ? (
@@ -158,12 +162,16 @@ useEffect(() => {
 
                 </td>
                 <td>
-  {user.appointments && user.appointments.length === 0 ? (
-    <span className="badge bg-danger">No</span>
+  {user?.hasappoitment === 'yes' && (!user.appointments || user.appointments.length === 0) ? (
+    <span className="badge bg-warning">Not yet appointed</span>
+  ) : user.appointments && user.appointments.length > 0 ? (
+    <span className="badge bg-success">Yes</span>
   ) : (
-    <span className="badge bg-success">yes</span>
+    <span className="badge bg-danger">{user?.hasappoitment}</span>
   )}
 </td>
+
+{/* <td>{user.hasappoitment}</td> */}
 
               </tr>
             ))

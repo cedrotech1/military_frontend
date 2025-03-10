@@ -124,9 +124,8 @@ const MissionsPage = () => {
         },
         body: JSON.stringify(formData),
       });
-
+      
       const data = await response.json();
-
       if (response.ok) {
         toast.success(data.message || "Mission added successfully.");
         setFormData({
