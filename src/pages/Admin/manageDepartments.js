@@ -186,6 +186,7 @@ const ManageDepartments = () => {
                   <thead>
                     <tr>
                       <th>#</th>
+                      <th>Department ID</th>
                       <th>Name</th>
                       <th>Leader</th>
                      
@@ -196,6 +197,7 @@ const ManageDepartments = () => {
                     {currentDepartments.map((dept, index) => (
                       <tr key={dept.id}>
                         <td>{index + 1}</td>
+                        <td>{dept.id}</td>
                         <td>{dept.name}</td>
                         <td>{dept.reader?.firstname} {dept.reader?.lastname}</td>
                        
