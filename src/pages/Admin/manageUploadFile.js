@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Button, Form, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, Alert, Card } from 'react-bootstrap';
 
 const FileUpload = () => {
   const [file, setFile] = useState(null);
@@ -8,11 +8,13 @@ const FileUpload = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [uploadSummary, setUploadSummary] = useState(null);
 
-  // Allowed Excel file types
-  const allowedTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
+  const allowedTypes = [
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-excel'
+  ];
 
-  // Handle file selection
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
 
@@ -27,7 +29,6 @@ const FileUpload = () => {
     }
   };
 
-  // Upload file function
   const handleUpload = async () => {
     if (!file) {
       setError('Please select a valid Excel file first.');
@@ -37,14 +38,17 @@ const FileUpload = () => {
     const formData = new FormData();
     formData.append('file', file);
 
+    console.log('Uploading file:', file.name);
+
     const token = localStorage.getItem("token");
     setLoading(true);
     setError('');
     setSuccess('');
+    setUploadSummary(null);
 
     try {
-      await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/api/v1/users/upload`,
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/users/upload-excel`,
         formData,
         {
           headers: {
@@ -57,7 +61,11 @@ const FileUpload = () => {
       setLoading(false);
       setSuccess('File uploaded successfully!');
       setUploadedFiles([...uploadedFiles, file.name]);
-      setFile(null); // Reset file input after upload
+      setFile(null);
+      document.getElementById('fileUpload').value = '';
+
+      // Save API response in state
+      setUploadSummary(response.data);
     } catch (error) {
       setLoading(false);
       setError('Failed to upload file. Please try again.');
@@ -109,11 +117,36 @@ const FileUpload = () => {
             </Button>
           </Form>
 
-          {/* Error Alert */}
           {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
-
-          {/* Success Alert */}
           {success && <Alert variant="success" className="mt-3">{success}</Alert>}
+
+          {/* Summary Card */}
+          {uploadSummary && (
+            <Card className="mt-4 shadow-sm">
+              <Card.Body>
+                <Card.Title className="text-success">Upload Summary</Card.Title>
+                <Card.Text>
+                  <strong>Total Users Created:</strong> {uploadSummary.createdUsers.length}
+                </Card.Text>
+                <Card.Text>
+                  <strong>Duplicate Users:</strong> {uploadSummary.duplicateUsers || "No duplicates found"}
+                </Card.Text>
+                
+                {uploadSummary.createdUsers.length > 0 && (
+                  <>
+                    <Card.Subtitle className="mt-3">Created Users:</Card.Subtitle>
+                    <ul>
+                      {uploadSummary.createdUsers.map((user, index) => (
+                        <li key={index}>
+                          <strong>{user.firstname} {user.lastname}</strong> - {user.email} ({user.role})
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </Card.Body>
+            </Card>
+          )}
         </Col>
       </Row>
     </Container>
@@ -121,3 +154,5 @@ const FileUpload = () => {
 };
 
 export default FileUpload;
+  
+  
