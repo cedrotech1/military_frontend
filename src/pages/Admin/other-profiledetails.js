@@ -85,8 +85,9 @@ const AddOrGetSoldierSkills = () => {
       .then((response) => {
         setLoading(false);
         setMessage('Skills added successfully!');
-        // Optionally refresh the skill list
-        setSoldierSkills([...soldierSkills, response.data]);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((error) => {
         setLoading(false);
