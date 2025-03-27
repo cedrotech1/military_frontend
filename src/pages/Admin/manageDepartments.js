@@ -202,9 +202,10 @@ const ManageDepartments = () => {
                         <td>{dept.reader?.firstname} {dept.reader?.lastname}</td>
                        
                         <td>
-                          <button className="btn btn-sm me-2" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'black' }} onClick={() => handleEditDepartment(dept)}>
-                            Edit
-                          </button>
+                          {/* <button className="btn btn-sm me-2" style={{ border: '1px solid green', backgroundColor: 'lightgreen', color: 'black' }} onClick={() => handleEditDepartment(dept)}>
+                            Edit 1
+                          </button> */}
+
                           <button className="btn btn-danger btn-sm" onClick={() => deleteDepartment(dept.id)}>
                             Delete
                           </button>
